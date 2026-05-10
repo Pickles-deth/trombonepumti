@@ -5,6 +5,10 @@
 <title>トロンボーンパンチ</title>
 
 <style>
+  body {
+    font-family: sans-serif;
+  }
+
   #controls {
     margin-top: 10px;
   }
@@ -25,6 +29,7 @@
 
   #game img {
     width: 80px;
+    display: block;
   }
 </style>
 </head>
@@ -43,7 +48,7 @@
   <button onclick="startGame(4)">4人</button>
 </div>
 
-<!-- ゲーム画面 -->
+<!-- ゲーム -->
 <div id="game" style="display:none;">
   <div id="hud">
     <div id="turn">PLAYER 1</div>
@@ -51,10 +56,10 @@
     <div id="timer">Time: 30</div>
   </div>
 
-  <img id="hero" src="images/hero.png">
-  <img id="slide" src="images/slide.png">
-  <img id="enemy" src="images/enemy.png">
-  <img id="item" src="images/item_good.png">
+  <img src="images/hero.png">
+  <img src="images/slide.png">
+  <img src="images/enemy.png">
+  <img src="images/item_good.png">
 </div>
 
 <!-- 操作 -->
