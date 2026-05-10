@@ -1,19 +1,23 @@
+console.log("script.js 読み込みOK");
+
 let players = 1;
 let currentPlayer = 1;
 let score = 0;
 let time = 30;
-let timerId = null;
+let timer = null;
 
+// ★超重要：グローバル関数にする
 function startGame(p) {
+  console.log("startGame:", p);
+
   players = p;
+  currentPlayer = 1;
+  score = 0;
+  time = 30;
 
   document.getElementById("menu").style.display = "none";
   document.getElementById("game").style.display = "block";
   document.getElementById("controls").style.display = "block";
-
-  currentPlayer = 1;
-  score = 0;
-  time = 30;
 
   updateUI();
   startTimer();
@@ -28,9 +32,9 @@ function updateUI() {
 }
 
 function startTimer() {
-  clearInterval(timerId);
+  clearInterval(timer);
 
-  timerId = setInterval(() => {
+  timer = setInterval(() => {
     time--;
     updateUI();
 
@@ -42,7 +46,7 @@ function startTimer() {
 
 function nextTurn() {
   if (players === 1) {
-    // 1人プレーはリセット
+    alert("1人プレー終了！スコア: " + score);
     time = 30;
     score = 0;
     updateUI();
@@ -59,21 +63,19 @@ function nextTurn() {
 
   time = 30;
   score = 0;
-
   updateUI();
 }
 
-// ==== 操作系（仮） ====
 function moveLeft() {
-  console.log("左移動");
+  console.log("left");
 }
 
 function moveRight() {
-  console.log("右移動");
+  console.log("right");
 }
 
 function stopMove() {
-  console.log("停止");
+  console.log("stop");
 }
 
 function punch() {
