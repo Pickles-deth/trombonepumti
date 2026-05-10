@@ -1,79 +1,82 @@
-let players = [];
+let players = 1;
+let currentPlayer = 1;
+let score = 0;
+let time = 30;
+let timerId = null;
+
+function startGame(p) {
+  players = p;
+
+  document.getElementById("menu").style.display = "none";
+  document.getElementById("game").style.display = "block";
+  document.getElementById("controls").style.display = "block";
+
+  currentPlayer = 1;
+  score = 0;
+  time = 30;
+
+  updateUI();
+  startTimer();
 }
 
+function updateUI() {
+  document.getElementById("turn").innerText =
+    players === 1 ? "SOLO MODE" : "PLAYER " + currentPlayer;
+
+  document.getElementById("score").innerText = "Score: " + score;
+  document.getElementById("timer").innerText = "Time: " + time;
+}
+
+function startTimer() {
+  clearInterval(timerId);
+
+  timerId = setInterval(() => {
+    time--;
+    updateUI();
+
+    if (time <= 0) {
+      nextTurn();
+    }
+  }, 1000);
+}
+
+function nextTurn() {
+  if (players === 1) {
+    // 1人プレーはリセット
+    time = 30;
+    score = 0;
+    updateUI();
+    return;
+  }
+
+  currentPlayer++;
+
+  if (currentPlayer > players) {
+    alert("ゲーム終了！");
+    location.reload();
+    return;
+  }
+
+  time = 30;
+  score = 0;
+
+  updateUI();
+}
+
+// ==== 操作系（仮） ====
 function moveLeft() {
-  velocity = -6;
+  console.log("左移動");
 }
 
 function moveRight() {
-  velocity = 6;
+  console.log("右移動");
 }
 
 function stopMove() {
-  velocity = 0;
+  console.log("停止");
 }
 
 function punch() {
-
-  let distance = Math.abs((heroX + 120) - enemyX);
-
-  if (distance < 120) {
-
-    score += 10;
-
-    enemy.style.transform = "translateX(40px) rotate(10deg)";
-
-    setTimeout(() => {
-      enemy.style.transform = "translateX(0px) rotate(0deg)";
-    },150);
-
-  } else {
-
-    score -= 3;
-  }
-
-  if (Math.abs(heroX - itemX) < 60) {
-
-    if (itemType === "good") {
-
-      score += 15;
-      alert("⭐ GOOD ITEM!");
-
-    } else {
-
-      score -= 10;
-      alert("☠️ 唾を踏んだ！");
-    }
-
-    spawnItem();
-  }
-
-  scoreText.innerText = `Score: ${score}`;
-}
-
-function spawnItem() {
-
-  itemX = 0;
-
-  if (Math.random() > 0.5) {
-
-    itemType = "good";
-    item.src = "images/item_good.png";
-
-  } else {
-
-    itemType = "bad";
-    item.src = "images/spit.png";
-  }
-}
-
-function showResult() {
-
-  let result = players
-    .map((s,i) => `PLAYER ${i+1}: ${s}`)
-    .join("\n");
-
-  alert("🏆 RESULT\n\n" + result);
-
-  location.reload();
+  score += 10;
+  updateUI();
 }
