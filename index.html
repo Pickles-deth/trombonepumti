@@ -1,38 +1,50 @@
 <!DOCTYPE html>
-    #controls {
-      margin-top: 10px;
-    }
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>トロンボーンパンチ</title>
 
-    .controlBtn {
-      width: 90px;
-      height: 60px;
-      font-size: 24px;
-      border-radius: 12px;
-    }
+<style>
+  #controls {
+    margin-top: 10px;
+  }
 
-    #punchBtn {
-      width: 200px;
-      height: 70px;
-      font-size: 28px;
-      background: orange;
-    }
+  .controlBtn {
+    width: 90px;
+    height: 60px;
+    font-size: 24px;
+    border-radius: 12px;
+  }
 
-  </style>
+  #punchBtn {
+    width: 200px;
+    height: 70px;
+    font-size: 28px;
+    background: orange;
+  }
+
+  #game img {
+    width: 80px;
+  }
+</style>
 </head>
+
 <body>
 
 <h1>🎺 トロンボーンパンチ</h1>
 
+<!-- メニュー -->
 <div id="menu">
   <h2>人数を選択</h2>
 
+  <button onclick="startGame(1)">1人</button>
   <button onclick="startGame(2)">2人</button>
   <button onclick="startGame(3)">3人</button>
   <button onclick="startGame(4)">4人</button>
 </div>
 
+<!-- ゲーム画面 -->
 <div id="game" style="display:none;">
-
   <div id="hud">
     <div id="turn">PLAYER 1</div>
     <div id="score">Score: 0</div>
@@ -43,11 +55,10 @@
   <img id="slide" src="images/slide.png">
   <img id="enemy" src="images/enemy.png">
   <img id="item" src="images/item_good.png">
-
 </div>
 
+<!-- 操作 -->
 <div id="controls" style="display:none;">
-
   <button class="controlBtn" onclick="moveLeft()">⬅️</button>
   <button class="controlBtn" onclick="stopMove()">⏹</button>
   <button class="controlBtn" onclick="moveRight()">➡️</button>
@@ -55,7 +66,6 @@
   <br><br>
 
   <button id="punchBtn" onclick="punch()">👊 PUNCH</button>
-
 </div>
 
 <script src="script.js"></script>
