@@ -184,7 +184,9 @@ function updatePlayer(){
 function spawnEnemy(){
 
     const enemy =
-    document.createElement("div");
+    document.createElement("img");
+    enemy.src =
+    "images/enemy_idle.png";
 
     enemy.className =
     "enemy";
