@@ -172,35 +172,39 @@ function updatePlayer(){
 //
 // 敵生成
 //
-function updateEnemies(){
+function spawnEnemy(){
 
-    for(
-        let i = enemies.length - 1;
-        i >= 0;
-        i--
-    ){
+    const enemy =
+    document.createElement("img");
 
-        const enemy =
-        enemies[i];
+    enemy.src =
+    "images/enemy_idle.png";
 
-        // 左へ移動
-        enemy.x -= enemy.speed;
+    enemy.className =
+    "enemy";
 
-        // 位置更新
-        enemy.style.left =
-        enemy.x + "px";
+    // 右から出現
+    enemy.x =
+    window.innerWidth + 100;
 
-        enemy.style.top =
-        enemy.y + "px";
+    // ランダム高さ
+    enemy.y =
+    Math.random() *
+    (window.innerHeight - 120);
 
-        // 左画面外
-        if(enemy.x < -150){
+    // ランダム速度
+    enemy.speed =
+    3 + Math.random() * 4;
 
-            enemy.remove();
+    enemy.style.left =
+    enemy.x + "px";
 
-            enemies.splice(i,1);
-        }
-    }
+    enemy.style.top =
+    enemy.y + "px";
+
+    game.appendChild(enemy);
+
+    enemies.push(enemy);
 }
 
 
@@ -237,10 +241,11 @@ function punch(){
     //
     // 当たり判定
     //
-    for(let i =
-        enemies.length - 1;
+    for(
+        let i = enemies.length - 1;
         i >= 0;
-        i--){
+        i--
+    ){
 
         const enemy =
         enemies[i];
@@ -281,6 +286,7 @@ function punch(){
         }
     }
 
+    // パンチ終了
     setTimeout(()=>{
 
         slide.remove();
@@ -290,7 +296,7 @@ function punch(){
 
         punching = false;
 
-    },150);
+    },400);
 }
 
 
@@ -299,22 +305,27 @@ function punch(){
 //
 function updateEnemies(){
 
-    for(let i =
-        enemies.length - 1;
+    for(
+        let i = enemies.length - 1;
         i >= 0;
-        i--){
+        i--
+    ){
 
         const enemy =
         enemies[i];
 
-        // 左移動
+        // 左へ移動
         enemy.x -= enemy.speed;
 
+        // 位置更新
         enemy.style.left =
         enemy.x + "px";
 
-        // 画面外
-        if(enemy.x < -100){
+        enemy.style.top =
+        enemy.y + "px";
+
+        // 画面外で削除
+        if(enemy.x < -150){
 
             enemy.remove();
 
@@ -334,7 +345,8 @@ function gameLoop(){
     updateEnemies();
 
     requestAnimationFrame(
-    gameLoop);
+        gameLoop
+    );
 }
 
 
