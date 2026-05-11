@@ -9,7 +9,7 @@ document.getElementById("punchButton");
 
 
 //
-// 主人公生成
+// 主人公
 //
 const player =
 document.createElement("img");
@@ -17,7 +17,7 @@ document.createElement("img");
 player.id = "player";
 
 player.src =
-"images/hero.png";
+"images/hero_idle.png";
 
 let playerX = 150;
 let playerY = 300;
@@ -139,27 +139,23 @@ function updatePlayer(){
     }
 
     // 画面制限
-    if(playerX < 0){
-        playerX = 0;
-    }
+    playerX =
+    Math.max(
+        0,
+        Math.min(
+            window.innerWidth - 120,
+            playerX
+        )
+    );
 
-    if(playerX >
-       window.innerWidth - 120){
-
-        playerX =
-        window.innerWidth - 120;
-    }
-
-    if(playerY < 0){
-        playerY = 0;
-    }
-
-    if(playerY >
-       window.innerHeight - 120){
-
-        playerY =
-        window.innerHeight - 120;
-    }
+    playerY =
+    Math.max(
+        0,
+        Math.min(
+            window.innerHeight - 120,
+            playerY
+        )
+    );
 
     player.style.left =
     playerX + "px";
@@ -183,19 +179,20 @@ function spawnEnemy(){
     enemy.className =
     "enemy";
 
-    // 右から出現
+    // 右端から出現
     enemy.x =
     window.innerWidth + 100;
 
-    // ランダム高さ
+    // ランダムY
     enemy.y =
     Math.random() *
-    (window.innerHeight - 120);
+    (window.innerHeight - 100);
 
     // ランダム速度
     enemy.speed =
-    3 + Math.random() * 4;
+    3 + Math.random() * 5;
 
+    // 初期位置
     enemy.style.left =
     enemy.x + "px";
 
@@ -220,7 +217,18 @@ function punch(){
     player.src =
     "images/hero_punch.png";
 
-    // スライド画像
+    //
+    // パンチ範囲
+    //
+    const punchX =
+    playerX + 180;
+
+    const punchY =
+    playerY + 40;
+
+    //
+    // パンチ画像
+    //
     const slide =
     document.createElement("img");
 
@@ -230,11 +238,17 @@ function punch(){
     slide.className =
     "slide";
 
+    slide.style.position =
+    "absolute";
+
+    slide.style.width =
+    "180px";
+
     slide.style.left =
-    (playerX + 80) + "px";
+    punchX + "px";
 
     slide.style.top =
-    (playerY + 20) + "px";
+    punchY + "px";
 
     game.appendChild(slide);
 
@@ -250,23 +264,21 @@ function punch(){
         const enemy =
         enemies[i];
 
-        const hitX =
+        const hit =
 
         enemy.x <
-        playerX + 260 &&
+        punchX + 180 &&
 
-        enemy.x >
-        playerX + 100;
-
-        const hitY =
+        enemy.x + 70 >
+        punchX &&
 
         enemy.y <
-        playerY + 100 &&
+        punchY + 80 &&
 
-        enemy.y >
-        playerY - 50;
+        enemy.y + 70 >
+        punchY;
 
-        if(hitX && hitY){
+        if(hit){
 
             score += 100;
 
@@ -286,17 +298,19 @@ function punch(){
         }
     }
 
+    //
     // パンチ終了
+    //
     setTimeout(()=>{
 
         slide.remove();
 
         player.src =
-        "images/hero.png";
+        "images/hero_idle.png";
 
         punching = false;
 
-    },400);
+    },250);
 }
 
 
@@ -317,15 +331,15 @@ function updateEnemies(){
         // 左へ移動
         enemy.x -= enemy.speed;
 
-        // 位置更新
+        // 更新
         enemy.style.left =
         enemy.x + "px";
 
         enemy.style.top =
         enemy.y + "px";
 
-        // 画面外で削除
-        if(enemy.x < -150){
+        // 画面外
+        if(enemy.x < -100){
 
             enemy.remove();
 
@@ -357,7 +371,7 @@ setInterval(()=>{
 
     spawnEnemy();
 
-},1200);
+},800);
 
 
 //
