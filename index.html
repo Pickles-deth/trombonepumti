@@ -513,24 +513,15 @@ let timerInterval;
 
 function selectPlayers(num){
 
-   // 再生位置を最初に戻してから再生
-    titleBgm.currentTime = 0;
-    titleBgm.play().catch(e => {
-        console.log("再生に失敗しました:", e);
-    });
-    
+   // タイトルBGMを再生（すでに鳴っている場合はそのまま）
+    titleBgm.play().catch(e => console.log("BGM再生エラー:", e));
+
     totalPlayers = num;
-
     currentPlayer = 1;
+    scores = new Array(num).fill(0);
 
-    scores =
-    new Array(num).fill(0);
-
-    startScreen.style.display =
-    "none";
-
-    resultScreen.style.display =
-    "none";
+    startScreen.style.display = "none";
+    resultScreen.style.display = "none";
 
     showPlayerStart();
 }
@@ -647,13 +638,17 @@ function startTurn(){
 
 function endTurn(){
 
-    clearInterval(timerInterval);
-
+   clearInterval(timerInterval);
     gameRunning = false;
 
-    scores[currentPlayer - 1] =
-    score;
+    // ゲームBGMを止める
+    gameBgm.pause();
+    gameBgm.currentTime = 0;
 
+    // ★タイトルBGMを再開する
+    titleBgm.play().catch(e => console.log("BGM再生エラー:", e));
+
+    scores[currentPlayer - 1] = score;
     currentPlayer++;
 
     if(currentPlayer > totalPlayers){
