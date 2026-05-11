@@ -290,20 +290,25 @@ function spawnEnemy(){
     enemy.className =
     "enemy";
 
-    // 右端から出現
+    //
+    // 数値を直接持たせる
+    //
     enemy.x =
-    window.innerWidth;
+    window.innerWidth + 100;
 
-    // ランダム高さ
     enemy.y =
     Math.random() *
     (window.innerHeight - 120);
 
-    // ランダム速度
     enemy.speed =
-    2 + Math.random() * 5;
+    3 + Math.random() * 4;
 
-    // 初期位置
+    //
+    // 最初の位置
+    //
+    enemy.style.position =
+    "absolute";
+
     enemy.style.left =
     enemy.x + "px";
 
@@ -313,6 +318,12 @@ function spawnEnemy(){
     game.appendChild(enemy);
 
     enemies.push(enemy);
+
+    console.log(
+        "enemy spawned",
+        enemy.x,
+        enemy.y
+    );
 }
 
 
