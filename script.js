@@ -183,25 +183,17 @@ function updatePlayer(){
 //
 function spawnEnemy(){
 
-   const enemy =
-document.createElement("img");
+    const enemy =
+    document.createElement("div");
 
-enemy.className =
-"enemy";
- console.log(enemy.width);
-console.log(enemy.height);
-console.log(enemy.src);
-//
-// 敵画像
-//
-enemy.src =
-"images/enemy_idle.png";
+    enemy.className =
+    "enemy";
 
     //
     // 右端から出現
     //
     enemy.x =
-    window.innerWidth -200;
+    window.innerWidth + 100;
 
     //
     // ランダム高さ
