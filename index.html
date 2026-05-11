@@ -988,13 +988,9 @@ function punch(){
     }
 
     setTimeout(()=>{
-
-        player.src =
-        "images/hero_idle.png";
-
-        punching = false;
-
-    },500);
+    player.src = "images/hero_idle.png";
+    punching = false;
+}, 300); // 0.3秒に短縮
 }
 
 function updateEnemies(){
