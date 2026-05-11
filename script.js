@@ -1,58 +1,171 @@
-const game = document.getElementById("game");
-const player = document.getElementById("player");
-const scoreEl = document.getElementById("score");
+const game =
+document.getElementById("game");
 
-let score = 0;
+const scoreEl =
+document.getElementById("score");
+
+const punchButton =
+document.getElementById("punchButton");
+
+
+//
+// 主人公生成
+//
+const player =
+document.createElement("img");
+
+player.id = "player";
+
+player.src =
+"images/hero.png";
 
 let playerX = 150;
 let playerY = 300;
 
+player.style.left =
+playerX + "px";
+
+player.style.top =
+playerY + "px";
+
+game.appendChild(player);
+
+
+//
+// スコア
+//
+let score = 0;
+
+
+//
+// 入力
+//
 let up = false;
 let down = false;
 let left = false;
 let right = false;
 
-let punching = false;
 
+//
+// 敵配列
+//
 let enemies = [];
 
 
 //
-// キー入力
+// パンチ状態
 //
-document.addEventListener("keydown",(e)=>{
+let punching = false;
 
-    if(e.key === "ArrowUp") up = true;
-    if(e.key === "ArrowDown") down = true;
-    if(e.key === "ArrowLeft") left = true;
-    if(e.key === "ArrowRight") right = true;
+
+//
+// キーボード
+//
+document.addEventListener(
+"keydown",(e)=>{
+
+    if(e.key === "ArrowUp"){
+        up = true;
+    }
+
+    if(e.key === "ArrowDown"){
+        down = true;
+    }
+
+    if(e.key === "ArrowLeft"){
+        left = true;
+    }
+
+    if(e.key === "ArrowRight"){
+        right = true;
+    }
 
     if(e.code === "Space"){
         punch();
     }
 });
 
-document.addEventListener("keyup",(e)=>{
+document.addEventListener(
+"keyup",(e)=>{
 
-    if(e.key === "ArrowUp") up = false;
-    if(e.key === "ArrowDown") down = false;
-    if(e.key === "ArrowLeft") left = false;
-    if(e.key === "ArrowRight") right = false;
+    if(e.key === "ArrowUp"){
+        up = false;
+    }
+
+    if(e.key === "ArrowDown"){
+        down = false;
+    }
+
+    if(e.key === "ArrowLeft"){
+        left = false;
+    }
+
+    if(e.key === "ArrowRight"){
+        right = false;
+    }
 });
 
 
 //
-// プレイヤー移動
+// パンチボタン
+//
+punchButton.addEventListener(
+"click",()=>{
+
+    punch();
+
+});
+
+
+//
+// プレイヤー更新
 //
 function updatePlayer(){
 
-    if(up) playerY -= 6;
-    if(down) playerY += 6;
-    if(left) playerX -= 6;
-    if(right) playerX += 6;
+    if(up){
+        playerY -= 6;
+    }
 
-    player.style.left = playerX + "px";
-    player.style.top = playerY + "px";
+    if(down){
+        playerY += 6;
+    }
+
+    if(left){
+        playerX -= 6;
+    }
+
+    if(right){
+        playerX += 6;
+    }
+
+    // 画面制限
+    if(playerX < 0){
+        playerX = 0;
+    }
+
+    if(playerX >
+       window.innerWidth - 120){
+
+        playerX =
+        window.innerWidth - 120;
+    }
+
+    if(playerY < 0){
+        playerY = 0;
+    }
+
+    if(playerY >
+       window.innerHeight - 120){
+
+        playerY =
+        window.innerHeight - 120;
+    }
+
+    player.style.left =
+    playerX + "px";
+
+    player.style.top =
+    playerY + "px";
 }
 
 
@@ -61,17 +174,33 @@ function updatePlayer(){
 //
 function spawnEnemy(){
 
-    const enemy = document.createElement("img");
+    const enemy =
+    document.createElement("img");
 
-    enemy.src = "images/enemy_idle.png";
+    enemy.src =
+    "images/enemy_idle.png";
 
-    enemy.className = "enemy";
+    enemy.className =
+    "enemy";
 
-    enemy.x = window.innerWidth;
-    enemy.y = Math.random() * 500 + 100;
+    // 右から出現
+    enemy.x =
+    window.innerWidth + 100;
 
-    enemy.style.left = enemy.x + "px";
-    enemy.style.top = enemy.y + "px";
+    // ランダム高さ
+    enemy.y =
+    Math.random() *
+    (window.innerHeight - 100);
+
+    // ランダム速度
+    enemy.speed =
+    3 + Math.random() * 4;
+
+    enemy.style.left =
+    enemy.x + "px";
+
+    enemy.style.top =
+    enemy.y + "px";
 
     game.appendChild(enemy);
 
@@ -88,34 +217,54 @@ function punch(){
 
     punching = true;
 
-    player.src = "images/hero_punch.png";
+    player.src =
+    "images/hero_punch.png";
 
-    // スライド表示
-    const slide = document.createElement("img");
+    // スライド画像
+    const slide =
+    document.createElement("img");
 
-    slide.src = "images/slide.png";
+    slide.src =
+    "images/slide.png";
 
-    slide.className = "slide";
+    slide.className =
+    "slide";
 
-    slide.style.left = (playerX + 120) + "px";
-    slide.style.top = (playerY + 40) + "px";
+    slide.style.left =
+    (playerX + 80) + "px";
+
+    slide.style.top =
+    (playerY + 20) + "px";
 
     game.appendChild(slide);
 
+    //
     // 当たり判定
-    for(let i = enemies.length - 1; i >= 0; i--){
+    //
+    for(let i =
+        enemies.length - 1;
+        i >= 0;
+        i--){
 
-        const enemy = enemies[i];
+        const enemy =
+        enemies[i];
 
         const hitX =
-            enemy.x < playerX + 320 &&
-            enemy.x > playerX + 150;
+
+        enemy.x <
+        playerX + 260 &&
+
+        enemy.x >
+        playerX + 100;
 
         const hitY =
-            enemy.y < playerY + 120 &&
-            enemy.y > playerY - 50;
 
-        // スライド先端が当たった
+        enemy.y <
+        playerY + 100 &&
+
+        enemy.y >
+        playerY - 50;
+
         if(hitX && hitY){
 
             score += 100;
@@ -127,7 +276,9 @@ function punch(){
             "images/enemy_hit.png";
 
             setTimeout(()=>{
+
                 enemy.remove();
+
             },100);
 
             enemies.splice(i,1);
@@ -139,7 +290,7 @@ function punch(){
         slide.remove();
 
         player.src =
-        "images/hero_idle.png";
+        "images/hero.png";
 
         punching = false;
 
@@ -148,20 +299,26 @@ function punch(){
 
 
 //
-// 敵移動
+// 敵更新
 //
 function updateEnemies(){
 
-    for(let i = enemies.length - 1; i >= 0; i--){
+    for(let i =
+        enemies.length - 1;
+        i >= 0;
+        i--){
 
-        const enemy = enemies[i];
+        const enemy =
+        enemies[i];
 
-        enemy.x -= 5;
+        // 左移動
+        enemy.x -= enemy.speed;
 
         enemy.style.left =
         enemy.x + "px";
 
-        if(enemy.x < -200){
+        // 画面外
+        if(enemy.x < -100){
 
             enemy.remove();
 
@@ -180,7 +337,8 @@ function gameLoop(){
 
     updateEnemies();
 
-    requestAnimationFrame(gameLoop);
+    requestAnimationFrame(
+    gameLoop);
 }
 
 
@@ -191,7 +349,7 @@ setInterval(()=>{
 
     spawnEnemy();
 
-},1500);
+},1200);
 
 
 //
