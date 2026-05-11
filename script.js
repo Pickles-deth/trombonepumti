@@ -183,11 +183,17 @@ function updatePlayer(){
 //
 function spawnEnemy(){
 
-    const enemy =
-    document.createElement("div");
+   const enemy =
+document.createElement("img");
 
-    enemy.className =
-    "enemy";
+enemy.className =
+"enemy";
+
+//
+// 敵画像
+//
+enemy.src =
+"images/enemy_idle.png";
 
     //
     // 右端から出現
