@@ -4,6 +4,9 @@ document.getElementById("game");
 const scoreEl =
 document.getElementById("score");
 
+const punchButton =
+document.getElementById("punchButton");
+
 
 //
 // 主人公
@@ -41,7 +44,7 @@ let enemies = [];
 
 
 //
-// パンチ中
+// パンチ状態
 //
 let punching = false;
 
@@ -104,6 +107,17 @@ document.addEventListener(
     if(e.key === "ArrowRight"){
         right = false;
     }
+});
+
+
+//
+// パンチボタン
+//
+punchButton.addEventListener(
+"click",()=>{
+
+    punch();
+
 });
 
 
@@ -173,7 +187,7 @@ function spawnEnemy(){
     "enemy";
 
     //
-    // 右端から出現
+    // 右から出現
     //
     enemy.x =
     window.innerWidth + 100;
@@ -224,25 +238,17 @@ function punch(){
     //
     // パンチ範囲
     //
-    const slide =
-    document.createElement("div");
+    const punchLeft =
+    playerX + 90;
 
-    slide.className =
-    "slide";
+    const punchRight =
+    playerX + 240;
 
-    const punchX =
-    playerX + 120;
+    const punchTop =
+    playerY + 20;
 
-    const punchY =
-    playerY + 50;
-
-    slide.style.left =
-    punchX + "px";
-
-    slide.style.top =
-    punchY + "px";
-
-    game.appendChild(slide);
+    const punchBottom =
+    playerY + 120;
 
     //
     // 当たり判定
@@ -256,19 +262,31 @@ function punch(){
         const enemy =
         enemies[i];
 
+        const enemyLeft =
+        enemy.x;
+
+        const enemyRight =
+        enemy.x + 80;
+
+        const enemyTop =
+        enemy.y;
+
+        const enemyBottom =
+        enemy.y + 80;
+
         const hit =
 
-        enemy.x <
-        punchX + 180 &&
+        punchLeft <
+        enemyRight &&
 
-        enemy.x + 80 >
-        punchX &&
+        punchRight >
+        enemyLeft &&
 
-        enemy.y <
-        punchY + 40 &&
+        punchTop <
+        enemyBottom &&
 
-        enemy.y + 80 >
-        punchY;
+        punchBottom >
+        enemyTop;
 
         if(hit){
 
@@ -281,7 +299,7 @@ function punch(){
             "Score : " + score;
 
             //
-            // 消す
+            // 敵削除
             //
             enemy.remove();
 
@@ -293,8 +311,6 @@ function punch(){
     // パンチ終了
     //
     setTimeout(()=>{
-
-        slide.remove();
 
         player.src =
         "images/hero_idle.png";
@@ -320,13 +336,10 @@ function updateEnemies(){
         enemies[i];
 
         //
-        // 左へ移動
+        // 左移動
         //
         enemy.x -= enemy.speed;
 
-        //
-        // 更新
-        //
         enemy.style.left =
         enemy.x + "px";
 
