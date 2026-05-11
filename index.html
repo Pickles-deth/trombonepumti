@@ -368,16 +368,16 @@ function punch(){
         }
     }
 
-    setTimeout(()=>{
-
+   if(slide){
         slide.remove();
+    }
 
-        player.src =
-        "images/hero.png";
+    player.src =
+    "images/hero.png";
 
-        punching = false;
+    punching = false;
 
-    },150);
+},1000);
 }
 
 
