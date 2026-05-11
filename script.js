@@ -188,7 +188,9 @@ document.createElement("img");
 
 enemy.className =
 "enemy";
-
+ console.log(enemy.width);
+console.log(enemy.height);
+console.log(enemy.src);
 //
 // 敵画像
 //
