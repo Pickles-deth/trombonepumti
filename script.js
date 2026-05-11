@@ -63,7 +63,7 @@ function spawnEnemy(){
 
     const enemy = document.createElement("img");
 
-    enemy.src = "image/enemy_idle.png";
+    enemy.src = "images/enemy_idle.png";
 
     enemy.className = "enemy";
 
@@ -88,12 +88,12 @@ function punch(){
 
     punching = true;
 
-    player.src = "image/hero_punch.png";
+    player.src = "images/hero_punch.png";
 
     // スライド表示
     const slide = document.createElement("img");
 
-    slide.src = "image/slide.png";
+    slide.src = "images/slide.png";
 
     slide.className = "slide";
 
@@ -124,7 +124,7 @@ function punch(){
             "Score : " + score;
 
             enemy.src =
-            "image/enemy_hit.png";
+            "images/enemy_hit.png";
 
             setTimeout(()=>{
                 enemy.remove();
@@ -139,7 +139,7 @@ function punch(){
         slide.remove();
 
         player.src =
-        "image/hero_idle.png";
+        "images/hero_idle.png";
 
         punching = false;
 
