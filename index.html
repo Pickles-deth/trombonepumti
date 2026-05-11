@@ -47,11 +47,10 @@ body{
 
 #player{
     position:absolute;
-    width:100px;
-    height:100px;
-    font-size:90px;
+    width:140px;
+    height:140px;
+    object-fit:contain;
     z-index:20;
-    user-select:none;
 }
 
 .enemy{
@@ -120,6 +119,10 @@ body{
     <div id="timer">
         30
     </div>
+
+    <img
+    id="player"
+    src="images/hero_idle.png">
 
     <button id="punchButton">
         PUNCH
@@ -207,19 +210,19 @@ document.getElementById("nextButton");
 
 
 //
-// プレイヤー
+// 主人公
 //
 const player =
-document.createElement("div");
-
-player.id = "player";
-
-player.innerText = "🎺";
+document.getElementById("player");
 
 let playerX = 100;
 let playerY = 300;
 
-game.appendChild(player);
+player.style.left =
+playerX + "px";
+
+player.style.top =
+playerY + "px";
 
 
 //
@@ -525,17 +528,17 @@ function updatePlayer(){
     }
 
     if(playerX >
-       window.innerWidth - 100){
+       window.innerWidth - 140){
 
         playerX =
-        window.innerWidth - 100;
+        window.innerWidth - 140;
     }
 
     if(playerY >
-       window.innerHeight - 100){
+       window.innerHeight - 140){
 
         playerY =
-        window.innerHeight - 100;
+        window.innerHeight - 140;
     }
 
     player.style.left =
@@ -603,19 +606,20 @@ function punch(){
 
     punching = true;
 
-    player.innerText = "💥";
+    player.src =
+    "images/hero_punch.png";
 
     const punchLeft =
-    playerX + 50;
+    playerX + 90;
 
     const punchRight =
-    playerX + 170;
+    playerX + 240;
 
     const punchTop =
-    playerY;
+    playerY + 20;
 
     const punchBottom =
-    playerY + 100;
+    playerY + 120;
 
     for(
         let i = enemies.length - 1;
@@ -667,11 +671,12 @@ function punch(){
 
     setTimeout(()=>{
 
-        player.innerText = "🎺";
+        player.src =
+        "images/hero_idle.png";
 
         punching = false;
 
-    },300);
+    },500);
 }
 
 
