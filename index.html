@@ -860,7 +860,21 @@ function spawnEnemy(){
 
     enemy.className =
     "enemy";
+// ★ 20%の確率でレアキャラ（画像）を出す設定
+    const isRare = Math.random() < 0.2; 
+    let noteSymbol = "";
 
+    if (isRare) {
+        // 画像を表示する場合
+        const img = document.createElement("img");
+        img.src = "images/enemy_idle.png"; // ここに画像パス
+        img.style.width = "60%";
+        img.style.height = "60%";
+        enemy.appendChild(img);
+        noteSymbol = "RARE"; // 判定用の名前
+    } else {
+        // 普通の音符（今までの処理）
+        
     const notes = [
         "♪",
         "♫",
