@@ -470,6 +470,11 @@ document.getElementById("gameBgm");
 const punchSound =
 document.getElementById("punchSound");
 
+// 追加：音声をあらかじめ読み込む
+titleBgm.load();
+gameBgm.load();
+punchSound.load();
+
 titleBgm.volume = 0.5;
 gameBgm.volume = 0.5;
 punchSound.volume = 0.7;
@@ -508,8 +513,12 @@ let timerInterval;
 
 function selectPlayers(num){
 
-    titleBgm.play();
-
+   // 再生位置を最初に戻してから再生
+    titleBgm.currentTime = 0;
+    titleBgm.play().catch(e => {
+        console.log("再生に失敗しました:", e);
+    });
+    
     totalPlayers = num;
 
     currentPlayer = 1;
