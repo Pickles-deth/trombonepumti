@@ -7,17 +7,6 @@ document.getElementById("score");
 const punchButton =
 document.getElementById("punchButton");
 
-const idleImage =
-new Image();
-
-idleImage.src =
-"images/hero_idle.png";
-
-const punchImage =
-new Image();
-
-punchImage.src =
-"images/hero_punch.png";
 
 //
 // 主人公
@@ -27,8 +16,11 @@ document.createElement("img");
 
 player.id = "player";
 
+//
+// 最初の画像
+//
 player.src =
-idleImage.src;
+"images/hero_idle.png";
 
 let playerX = 100;
 let playerY = 300;
@@ -55,13 +47,13 @@ let enemies = [];
 
 
 //
-// パンチ状態
+// パンチ中
 //
 let punching = false;
 
 
 //
-// プレイヤー移動
+// 移動入力
 //
 let up = false;
 let down = false;
@@ -154,7 +146,7 @@ function updatePlayer(){
     }
 
     //
-    // 画面外防止
+    // 画面外制限
     //
     if(playerX < 0){
         playerX = 0;
@@ -198,7 +190,7 @@ function spawnEnemy(){
     "enemy";
 
     //
-    // 右から出現
+    // 右端から出現
     //
     enemy.x =
     window.innerWidth + 100;
@@ -211,7 +203,7 @@ function spawnEnemy(){
     (window.innerHeight - 100);
 
     //
-    // 速度
+    // ランダム速度
     //
     enemy.speed =
     3 + Math.random() * 4;
@@ -236,15 +228,26 @@ function spawnEnemy(){
 //
 function punch(){
 
+    //
+    // 連打防止
+    //
     if(punching) return;
 
     punching = true;
 
+    console.log("PUNCH!");
+
     //
-    // パンチ画像
+    // 画像変更
     //
     player.src =
     "images/hero_punch.png";
+
+    //
+    // テスト用
+    //
+    player.style.opacity =
+    "0.5";
 
     //
     // パンチ範囲
@@ -323,8 +326,14 @@ function punch(){
     //
     setTimeout(()=>{
 
+        //
+        // 元画像へ
+        //
         player.src =
         "images/hero_idle.png";
+
+        player.style.opacity =
+        "1";
 
         punching = false;
 
@@ -347,7 +356,7 @@ function updateEnemies(){
         enemies[i];
 
         //
-        // 左移動
+        // 左へ移動
         //
         enemy.x -= enemy.speed;
 
@@ -355,7 +364,7 @@ function updateEnemies(){
         enemy.x + "px";
 
         //
-        // 画面外
+        // 画面外削除
         //
         if(enemy.x < -100){
 
