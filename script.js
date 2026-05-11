@@ -243,11 +243,7 @@ function punch(){
     player.src =
     "images/hero_punch.png";
 
-    //
-    // テスト用
-    //
-    player.style.opacity =
-    "0.5";
+   
 
     //
     // パンチ範囲
