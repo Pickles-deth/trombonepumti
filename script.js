@@ -16,9 +16,6 @@ document.createElement("img");
 
 player.id = "player";
 
-//
-// 最初の画像
-//
 player.src =
 "images/hero_idle.png";
 
@@ -47,13 +44,13 @@ let enemies = [];
 
 
 //
-// パンチ中
+// パンチ状態
 //
 let punching = false;
 
 
 //
-// 移動入力
+// 入力
 //
 let up = false;
 let down = false;
@@ -170,6 +167,9 @@ function updatePlayer(){
         window.innerHeight - 140;
     }
 
+    //
+    // 更新
+    //
     player.style.left =
     playerX + "px";
 
@@ -185,6 +185,7 @@ function spawnEnemy(){
 
     const enemy =
     document.createElement("img");
+
     enemy.src =
     "images/enemy_idle.png";
 
@@ -195,20 +196,20 @@ function spawnEnemy(){
     // 右端から出現
     //
     enemy.x =
-    window.innerWidth + 100;
+    window.innerWidth + 200;
 
     //
     // ランダム高さ
     //
     enemy.y =
     Math.random() *
-    (window.innerHeight - 100);
+    (window.innerHeight - 250);
 
     //
     // ランダム速度
     //
     enemy.speed =
-    3 + Math.random() * 4;
+    3 + Math.random() * 5;
 
     //
     // 初期位置
@@ -219,9 +220,18 @@ function spawnEnemy(){
     enemy.style.top =
     enemy.y + "px";
 
+    //
+    // 追加
+    //
     game.appendChild(enemy);
 
     enemies.push(enemy);
+
+    console.log(
+        "spawn",
+        enemy.x,
+        enemy.y
+    );
 }
 
 
@@ -240,12 +250,10 @@ function punch(){
     console.log("PUNCH!");
 
     //
-    // 画像変更
+    // パンチ画像
     //
     player.src =
     "images/hero_punch.png";
-
-   
 
     //
     // パンチ範囲
@@ -278,13 +286,15 @@ function punch(){
         enemy.x;
 
         const enemyRight =
-        enemy.x + 80;
+        enemy.x +
+        enemy.offsetWidth;
 
         const enemyTop =
         enemy.y;
 
         const enemyBottom =
-        enemy.y + 80;
+        enemy.y +
+        enemy.offsetHeight;
 
         const hit =
 
@@ -324,14 +334,8 @@ function punch(){
     //
     setTimeout(()=>{
 
-        //
-        // 元画像へ
-        //
         player.src =
         "images/hero_idle.png";
-
-        player.style.opacity =
-        "1";
 
         punching = false;
 
@@ -358,13 +362,21 @@ function updateEnemies(){
         //
         enemy.x -= enemy.speed;
 
+        //
+        // 位置更新
+        //
         enemy.style.left =
         enemy.x + "px";
+
+        enemy.style.top =
+        enemy.y + "px";
+
+        console.log(enemy.x);
 
         //
         // 画面外削除
         //
-        if(enemy.x < -100){
+        if(enemy.x < -300){
 
             enemy.remove();
 
