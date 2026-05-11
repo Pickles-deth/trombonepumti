@@ -508,6 +508,8 @@ let timerInterval;
 
 function selectPlayers(num){
 
+    titleBgm.play();
+
     totalPlayers = num;
 
     currentPlayer = 1;
@@ -527,10 +529,6 @@ function selectPlayers(num){
 document.getElementById("btn1")
 .addEventListener("click",()=>{
 
-    titleBgm.currentTime = 0;
-
-    titleBgm.play().catch(()=>{});
-
     selectPlayers(1);
 
 });
@@ -538,20 +536,12 @@ document.getElementById("btn1")
 document.getElementById("btn2")
 .addEventListener("click",()=>{
 
-    titleBgm.currentTime = 0;
-
-    titleBgm.play().catch(()=>{});
-
     selectPlayers(2);
 
 });
 
 document.getElementById("btn3")
 .addEventListener("click",()=>{
-
-    titleBgm.currentTime = 0;
-
-    titleBgm.play().catch(()=>{});
 
     selectPlayers(3);
 
@@ -603,7 +593,7 @@ function startTurn(){
 
     gameBgm.currentTime = 0;
 
-    gameBgm.play().catch(()=>{});
+    gameBgm.play();
 
     score = 0;
 
@@ -915,7 +905,7 @@ function punch(){
 
     punchSound.currentTime = 0;
 
-    punchSound.play();.catch(()=>{});
+    punchSound.play();
 
     punching = true;
 
