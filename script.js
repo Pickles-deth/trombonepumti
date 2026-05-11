@@ -6,7 +6,7 @@ document.getElementById("score");
 
 
 //
-// プレイヤー
+// 主人公
 //
 const player =
 document.createElement("img");
@@ -35,15 +35,130 @@ let score = 0;
 
 
 //
-// 敵
+// 敵配列
 //
 let enemies = [];
 
 
 //
-// パンチ状態
+// パンチ中
 //
 let punching = false;
+
+
+//
+// プレイヤー移動
+//
+let up = false;
+let down = false;
+let left = false;
+let right = false;
+
+
+//
+// キーボード
+//
+document.addEventListener(
+"keydown",(e)=>{
+
+    if(e.key === "ArrowUp"){
+        up = true;
+    }
+
+    if(e.key === "ArrowDown"){
+        down = true;
+    }
+
+    if(e.key === "ArrowLeft"){
+        left = true;
+    }
+
+    if(e.key === "ArrowRight"){
+        right = true;
+    }
+
+    //
+    // スペースでパンチ
+    //
+    if(e.code === "Space"){
+
+        punch();
+    }
+});
+
+document.addEventListener(
+"keyup",(e)=>{
+
+    if(e.key === "ArrowUp"){
+        up = false;
+    }
+
+    if(e.key === "ArrowDown"){
+        down = false;
+    }
+
+    if(e.key === "ArrowLeft"){
+        left = false;
+    }
+
+    if(e.key === "ArrowRight"){
+        right = false;
+    }
+});
+
+
+//
+// プレイヤー更新
+//
+function updatePlayer(){
+
+    if(up){
+        playerY -= 6;
+    }
+
+    if(down){
+        playerY += 6;
+    }
+
+    if(left){
+        playerX -= 6;
+    }
+
+    if(right){
+        playerX += 6;
+    }
+
+    //
+    // 画面外防止
+    //
+    if(playerX < 0){
+        playerX = 0;
+    }
+
+    if(playerY < 0){
+        playerY = 0;
+    }
+
+    if(playerX >
+       window.innerWidth - 140){
+
+        playerX =
+        window.innerWidth - 140;
+    }
+
+    if(playerY >
+       window.innerHeight - 140){
+
+        playerY =
+        window.innerHeight - 140;
+    }
+
+    player.style.left =
+    playerX + "px";
+
+    player.style.top =
+    playerY + "px";
+}
 
 
 //
@@ -52,23 +167,33 @@ let punching = false;
 function spawnEnemy(){
 
     const enemy =
-    document.createElement("img");
-
-    enemy.src =
-    "images/enemy_idle.png";
+    document.createElement("div");
 
     enemy.className =
     "enemy";
 
+    //
+    // 右端から出現
+    //
     enemy.x =
     window.innerWidth + 100;
 
+    //
+    // ランダム高さ
+    //
     enemy.y =
-    260 + Math.random() * 200;
+    Math.random() *
+    (window.innerHeight - 100);
 
+    //
+    // 速度
+    //
     enemy.speed =
-    6;
+    3 + Math.random() * 4;
 
+    //
+    // 初期位置
+    //
     enemy.style.left =
     enemy.x + "px";
 
@@ -90,17 +215,17 @@ function punch(){
 
     punching = true;
 
+    //
+    // パンチ画像
+    //
     player.src =
     "images/hero_punch.png";
 
     //
-    // パンチ画像
+    // パンチ範囲
     //
     const slide =
-    document.createElement("img");
-
-    slide.src =
-    "images/slide.png";
+    document.createElement("div");
 
     slide.className =
     "slide";
@@ -109,7 +234,7 @@ function punch(){
     playerX + 120;
 
     const punchY =
-    playerY + 30;
+    playerY + 50;
 
     slide.style.left =
     punchX + "px";
@@ -134,32 +259,31 @@ function punch(){
         const hit =
 
         enemy.x <
-        punchX + 200 &&
+        punchX + 180 &&
 
         enemy.x + 80 >
         punchX &&
 
         enemy.y <
-        punchY + 100 &&
+        punchY + 40 &&
 
         enemy.y + 80 >
         punchY;
 
         if(hit){
 
+            //
+            // スコア
+            //
             score += 100;
 
             scoreEl.innerText =
             "Score : " + score;
 
-            enemy.src =
-            "images/enemy_hit.png";
-
-            setTimeout(()=>{
-
-                enemy.remove();
-
-            },100);
+            //
+            // 消す
+            //
+            enemy.remove();
 
             enemies.splice(i,1);
         }
@@ -177,21 +301,8 @@ function punch(){
 
         punching = false;
 
-    },200);
+    },150);
 }
-
-
-//
-// キー入力
-//
-document.addEventListener(
-"keydown",(e)=>{
-
-    if(e.code === "Space"){
-
-        punch();
-    }
-});
 
 
 //
@@ -209,17 +320,20 @@ function updateEnemies(){
         enemies[i];
 
         //
-        // 左移動
+        // 左へ移動
         //
         enemy.x -= enemy.speed;
 
+        //
+        // 更新
+        //
         enemy.style.left =
         enemy.x + "px";
 
         //
-        // 画面外削除
+        // 画面外
         //
-        if(enemy.x < -150){
+        if(enemy.x < -100){
 
             enemy.remove();
 
@@ -233,6 +347,8 @@ function updateEnemies(){
 // メインループ
 //
 function gameLoop(){
+
+    updatePlayer();
 
     updateEnemies();
 
@@ -249,7 +365,7 @@ setInterval(()=>{
 
     spawnEnemy();
 
-},800);
+},700);
 
 
 //
