@@ -979,26 +979,20 @@ function punch(){
 
         if(hit){
 
-            if(enemy.note === "♭"){
+            if (enemy.note === "♭") {
+        score -= 100;
+        if (score < 0) score = 0;
+    } else if (enemy.note === "RARE") {
+        // ★ レアキャラを叩いたら500点！
+        score += 500;
+    } else {
+        score += 100;
+    }
 
-                score -= 100;
-
-                if(score < 0){
-                    score = 0;
-                }
-
-            }else{
-
-                score += 100;
-            }
-
-            scoreEl.innerText =
-            "Score : " + score;
-
-            enemy.el.remove();
-
-            enemies.splice(i,1);
-        }
+    scoreEl.innerText = "Score : " + score;
+    enemy.el.remove();
+    enemies.splice(i, 1);
+}
     }
 
     setTimeout(()=>{
