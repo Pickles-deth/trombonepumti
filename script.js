@@ -110,7 +110,8 @@ function selectPlayers(num){
 
     showPlayerStart();
 }
-
+window.selectPlayers =
+selectPlayers;
 
 //
 // 開始画面
