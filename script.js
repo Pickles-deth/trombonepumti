@@ -1,4 +1,4 @@
-console.log("Trombone Punch 起動");
+console.log("GAME START");
 
 const game = document.getElementById("game");
 const player = document.getElementById("player");
@@ -10,6 +10,7 @@ let score = 0;
 let combo = 0;
 
 let playerX = 200;
+
 let moveLeft = false;
 let moveRight = false;
 
@@ -20,76 +21,77 @@ const PLAYER_SPEED = 8;
 let enemies = [];
 let items = [];
 
-//
-// キー入力
-//
-document.addEventListener("keydown", (e) => {
 
-    if (e.key === "ArrowLeft") {
+//
+// キーボード
+//
+document.addEventListener("keydown",(e)=>{
+
+    if(e.key === "ArrowLeft"){
         moveLeft = true;
     }
 
-    if (e.key === "ArrowRight") {
+    if(e.key === "ArrowRight"){
         moveRight = true;
     }
 
-    if (e.code === "Space") {
+    if(e.code === "Space"){
         punch();
     }
 });
 
-document.addEventListener("keyup", (e) => {
+document.addEventListener("keyup",(e)=>{
 
-    if (e.key === "ArrowLeft") {
+    if(e.key === "ArrowLeft"){
         moveLeft = false;
     }
 
-    if (e.key === "ArrowRight") {
+    if(e.key === "ArrowRight"){
         moveRight = false;
     }
 });
 
+
 //
 // プレイヤー更新
 //
-function updatePlayer() {
+function updatePlayer(){
 
-    if (moveLeft) {
+    if(moveLeft){
         playerX -= PLAYER_SPEED;
     }
 
-    if (moveRight) {
+    if(moveRight){
         playerX += PLAYER_SPEED;
     }
 
-    // 画面外制限
-    if (playerX < 0) {
+    if(playerX < 0){
         playerX = 0;
     }
 
-    if (playerX > window.innerWidth - 120) {
-        playerX = window.innerWidth - 120;
+    if(playerX > window.innerWidth - 180){
+        playerX = window.innerWidth - 180;
     }
 
     player.style.left = playerX + "px";
 }
 
+
 //
 // 敵生成
 //
-function spawnEnemy() {
+function spawnEnemy(){
 
     const enemy = document.createElement("img");
 
-    enemy.src =
-        "https://cdn-icons-png.flaticon.com/512/616/616408.png";
+    enemy.src = "assets/enemy_idle.png";
 
     enemy.className = "enemy";
 
     enemy.x = window.innerWidth + 100;
-    enemy.y = window.innerHeight - 170;
+    enemy.y = window.innerHeight - 200;
 
-    enemy.speed = 4 + Math.random() * 4;
+    enemy.speed = 5 + Math.random() * 3;
 
     enemy.style.left = enemy.x + "px";
     enemy.style.top = enemy.y + "px";
@@ -99,25 +101,22 @@ function spawnEnemy() {
     enemies.push(enemy);
 }
 
+
 //
 // アイテム生成
 //
-function spawnItem(isGood = true) {
+function spawnItem(){
 
-    const item = document.createElement("div");
+    const item = document.createElement("img");
+
+    item.src = "assets/item_good.png";
 
     item.className = "item";
 
-    item.innerHTML = isGood ? "➕" : "➖";
-
-    item.style.fontSize = "48px";
-
-    item.good = isGood;
-
     item.x = window.innerWidth + 100;
-    item.y = 120 + Math.random() * 300;
+    item.y = 150 + Math.random() * 250;
 
-    item.speed = 5;
+    item.speed = 4;
 
     item.style.left = item.x + "px";
     item.style.top = item.y + "px";
@@ -127,63 +126,92 @@ function spawnItem(isGood = true) {
     items.push(item);
 }
 
+
 //
 // パンチ
 //
-function punch() {
+function punch(){
 
-    if (punching) return;
+    if(punching) return;
 
     punching = true;
 
-    player.style.transform = "scale(1.25)";
+    player.src = "assets/hero_punch.png";
 
-    setTimeout(() => {
+    // パンチ画像
+    const punchImg = document.createElement("img");
 
-        player.style.transform = "scale(1)";
+    punchImg.src = "assets/punch.png";
 
-        punching = false;
+    punchImg.className = "punch";
 
-    }, 100);
+    punchImg.style.left =
+        (playerX + 120) + "px";
 
-    enemies.forEach((enemy, index) => {
+    punchImg.style.top =
+        (window.innerHeight - 170) + "px";
 
-        const dx = Math.abs(enemy.x - playerX);
+    game.appendChild(punchImg);
 
-        // パンチ範囲
-        if (dx < 150) {
+    // 当たり判定
+    for(let i = enemies.length - 1; i >= 0; i--){
+
+        const enemy = enemies[i];
+
+        const dx =
+          Math.abs(enemy.x - (playerX + 140));
+
+        if(dx < 140){
 
             combo++;
 
             score += 100 * combo;
 
-            enemy.style.transform = "scale(1.5)";
-            enemy.style.opacity = "0";
+            enemy.src =
+              "assets/enemy_hit.png";
 
-            setTimeout(() => {
-                enemy.remove();
-            }, 100);
-
-            enemies.splice(index, 1);
+            enemy.style.transform =
+              "scale(1.3)";
 
             updateUI();
+
+            setTimeout(()=>{
+
+                enemy.remove();
+
+            },100);
+
+            enemies.splice(i,1);
         }
-    });
+    }
+
+    setTimeout(()=>{
+
+        punchImg.remove();
+
+        player.src = "assets/hero_idle.png";
+
+        punching = false;
+
+    },120);
 }
+
 
 //
 // 敵更新
 //
-function updateEnemies() {
+function updateEnemies(){
 
-    enemies.forEach((enemy, index) => {
+    for(let i = enemies.length - 1; i >= 0; i--){
+
+        const enemy = enemies[i];
 
         enemy.x -= enemy.speed;
 
         enemy.style.left = enemy.x + "px";
 
-        // プレイヤーに到達
-        if (enemy.x < playerX - 40) {
+        // 接触
+        if(enemy.x < playerX){
 
             combo = 0;
 
@@ -193,89 +221,81 @@ function updateEnemies() {
 
             enemy.remove();
 
-            enemies.splice(index, 1);
+            enemies.splice(i,1);
         }
 
         // 画面外
-        if (enemy.x < -100) {
+        if(enemy.x < -200){
 
             enemy.remove();
 
-            enemies.splice(index, 1);
+            enemies.splice(i,1);
         }
-    });
+    }
 }
+
 
 //
 // アイテム更新
 //
-function updateItems() {
+function updateItems(){
 
-    items.forEach((item, index) => {
+    for(let i = items.length - 1; i >= 0; i--){
+
+        const item = items[i];
 
         item.x -= item.speed;
 
         item.style.left = item.x + "px";
 
-        const dx = Math.abs(item.x - playerX);
+        const dx =
+          Math.abs(item.x - playerX);
 
-        const dy = Math.abs(
-            item.y - (window.innerHeight - 140)
-        );
+        if(dx < 100){
 
-        // 取得判定
-        if (dx < 80 && dy < 100) {
-
-            if (item.good) {
-
-                score += 500;
-
-            } else {
-
-                score -= 300;
-
-                combo = 0;
-            }
+            score += 500;
 
             updateUI();
 
             item.remove();
 
-            items.splice(index, 1);
+            items.splice(i,1);
         }
 
-        // 画面外
-        if (item.x < -100) {
+        if(item.x < -100){
 
             item.remove();
 
-            items.splice(index, 1);
+            items.splice(i,1);
         }
-    });
+    }
 }
+
 
 //
 // UI更新
 //
-function updateUI() {
+function updateUI(){
 
-    scoreEl.innerText = "Score : " + score;
+    scoreEl.innerText =
+      "Score : " + score;
 
-    if (combo >= 2) {
+    if(combo >= 2){
 
         comboEl.innerText =
-            combo + " COMBO !!";
+          combo + " COMBO!";
 
-    } else {
+    }else{
 
         comboEl.innerText = "";
     }
 }
 
+
 //
 // メインループ
 //
-function gameLoop() {
+function gameLoop(){
 
     updatePlayer();
 
@@ -286,23 +306,25 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
+
 //
 // スポーン
 //
-setInterval(() => {
+setInterval(()=>{
 
     spawnEnemy();
 
-}, 1200);
+},1200);
 
-setInterval(() => {
+setInterval(()=>{
 
-    spawnItem(Math.random() > 0.4);
+    spawnItem();
 
-}, 3000);
+},5000);
+
 
 //
-// ゲーム開始
+// 開始
 //
 updateUI();
 
