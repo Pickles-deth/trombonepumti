@@ -25,7 +25,7 @@ body{
     height:100vh;
     overflow:hidden;
 
-   background:#87CEEB;
+    background:#87CEEB;
 }
 
 #score{
@@ -67,15 +67,23 @@ body{
     position:absolute;
     right:30px;
     bottom:30px;
-    width:120px;
-    height:120px;
+
+    width:110px;
+    height:110px;
+
     border:none;
     border-radius:50%;
+
     background:red;
+
     color:white;
-    font-size:28px;
+
+    font-size:26px;
+
     font-weight:bold;
+
     z-index:100;
+
     cursor:pointer;
 
     -webkit-tap-highlight-color: transparent;
@@ -92,15 +100,33 @@ body{
     z-index:200;
 }
 
+#padTop{
+    text-align:center;
+}
+
+#padMiddle{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
 #mobilePad button{
-    width:80px;
-    height:80px;
-    margin:5px;
-    font-size:40px;
+
+    width:60px;
+    height:60px;
+
+    margin:4px;
+
+    font-size:28px;
+
     border:none;
-    border-radius:20px;
+
+    border-radius:16px;
+
     background:#444;
+
     color:white;
+
     opacity:0.8;
 
     -webkit-tap-highlight-color: transparent;
@@ -121,14 +147,22 @@ body{
 #messageScreen,
 #resultScreen{
     position:absolute;
+
     width:100%;
     height:100%;
+
     background:rgba(0,0,0,0.9);
+
     z-index:500;
+
     display:flex;
+
     flex-direction:column;
+
     justify-content:center;
+
     align-items:center;
+
     color:white;
 }
 
@@ -138,9 +172,13 @@ body{
 }
 
 #startScreen button,
-#messageScreen button{
+#messageScreen button,
+#resultScreen button{
+
     margin:10px;
+
     padding:20px 40px;
+
     font-size:30px;
 
     -webkit-tap-highlight-color: transparent;
@@ -171,21 +209,25 @@ body{
 
     <div id="mobilePad">
 
-        <button id="upBtn" tabindex="-1">
-            ↑
-        </button>
+        <div id="padTop">
 
-        <div>
+            <button id="upBtn">
+                ↑
+            </button>
 
-            <button id="leftBtn" tabindex="-1">
+        </div>
+
+        <div id="padMiddle">
+
+            <button id="leftBtn">
                 ←
             </button>
 
-            <button id="downBtn" tabindex="-1">
+            <button id="downBtn">
                 ↓
             </button>
 
-            <button id="rightBtn" tabindex="-1">
+            <button id="rightBtn">
                 →
             </button>
 
@@ -245,6 +287,14 @@ body{
 
         <div id="resultText"></div>
 
+        <button id="replayButton">
+            REPLAY
+        </button>
+
+        <button id="endButton">
+            END
+        </button>
+
     </div>
 
 </div>
@@ -280,6 +330,12 @@ document.getElementById("messageText");
 
 const nextButton =
 document.getElementById("nextButton");
+
+const replayButton =
+document.getElementById("replayButton");
+
+const endButton =
+document.getElementById("endButton");
 
 const player =
 document.getElementById("player");
@@ -324,10 +380,15 @@ function selectPlayers(num){
 
     totalPlayers = num;
 
+    currentPlayer = 1;
+
     scores =
     new Array(num).fill(0);
 
     startScreen.style.display =
+    "none";
+
+    resultScreen.style.display =
     "none";
 
     showPlayerStart();
@@ -384,6 +445,32 @@ nextButton.addEventListener(
     "none";
 
     startTurn();
+
+});
+
+
+//
+// REPLAY
+//
+replayButton.addEventListener(
+"click",()=>{
+
+    resultScreen.style.display =
+    "none";
+
+    startScreen.style.display =
+    "flex";
+
+});
+
+
+//
+// END
+//
+endButton.addEventListener(
+"click",()=>{
+
+    location.reload();
 
 });
 
@@ -609,7 +696,7 @@ rightBtn.addEventListener(
 
 
 //
-// パンチボタン
+// パンチ
 //
 punchButton.addEventListener(
 "click",()=>{
