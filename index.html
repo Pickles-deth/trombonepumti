@@ -23,8 +23,16 @@ body{
     width:100vw;
     height:100vh;
     overflow:hidden;
+
     background:
-    linear-gradient(#222,#000);
+    linear-gradient(
+        rgba(0,0,0,0.4),
+        rgba(0,0,0,0.7)
+    ),
+    url("images/background.jpg");
+
+    background-size:cover;
+    background-position:center;
 }
 
 #score{
@@ -78,6 +86,32 @@ body{
     cursor:pointer;
 }
 
+#mobilePad{
+    position:absolute;
+    left:20px;
+    bottom:20px;
+    z-index:200;
+}
+
+#mobilePad button{
+    width:80px;
+    height:80px;
+    margin:5px;
+    font-size:40px;
+    border:none;
+    border-radius:20px;
+    background:#444;
+    color:white;
+    opacity:0.8;
+}
+
+@media (min-width:900px){
+
+    #mobilePad{
+        display:none;
+    }
+}
+
 #startScreen,
 #messageScreen,
 #resultScreen{
@@ -123,6 +157,22 @@ body{
     <img
     id="player"
     src="images/hero_idle.png">
+
+    <div id="mobilePad">
+
+        <button id="upBtn">↑</button>
+
+        <div>
+
+            <button id="leftBtn">←</button>
+
+            <button id="downBtn">↓</button>
+
+            <button id="rightBtn">→</button>
+
+        </div>
+
+    </div>
 
     <button id="punchButton">
         PUNCH
@@ -488,6 +538,78 @@ document.addEventListener(
 
 
 //
+// スマホ操作
+//
+const upBtn =
+document.getElementById("upBtn");
+
+const downBtn =
+document.getElementById("downBtn");
+
+const leftBtn =
+document.getElementById("leftBtn");
+
+const rightBtn =
+document.getElementById("rightBtn");
+
+upBtn.addEventListener(
+"touchstart",()=>{
+
+    up = true;
+
+});
+
+upBtn.addEventListener(
+"touchend",()=>{
+
+    up = false;
+
+});
+
+downBtn.addEventListener(
+"touchstart",()=>{
+
+    down = true;
+
+});
+
+downBtn.addEventListener(
+"touchend",()=>{
+
+    down = false;
+
+});
+
+leftBtn.addEventListener(
+"touchstart",()=>{
+
+    left = true;
+
+});
+
+leftBtn.addEventListener(
+"touchend",()=>{
+
+    left = false;
+
+});
+
+rightBtn.addEventListener(
+"touchstart",()=>{
+
+    right = true;
+
+});
+
+rightBtn.addEventListener(
+"touchend",()=>{
+
+    right = false;
+
+});
+
+
+//
 // パンチボタン
 //
 punchButton.addEventListener(
@@ -605,6 +727,15 @@ function punch(){
     if(punching) return;
 
     punching = true;
+
+    score -= 10;
+
+    if(score < 0){
+        score = 0;
+    }
+
+    scoreEl.innerText =
+    "Score : " + score;
 
     player.src =
     "images/hero_punch.png";
