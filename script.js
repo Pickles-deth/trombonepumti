@@ -201,7 +201,7 @@ enemy.src =
     // 右端から出現
     //
     enemy.x =
-    window.innerWidth + 100;
+    window.innerWidth -200;
 
     //
     // ランダム高さ
