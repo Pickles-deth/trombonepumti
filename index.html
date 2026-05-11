@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+content="width=device-width, initial-scale=1.0, user-scalable=no">
 
 <title>Trombone Punch</title>
 
@@ -16,6 +16,7 @@ body{
     overflow:hidden;
     background:#111;
     font-family:Arial,sans-serif;
+    touch-action:none;
 }
 
 #game{
@@ -84,6 +85,12 @@ body{
     font-weight:bold;
     z-index:100;
     cursor:pointer;
+
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select:none;
+    -webkit-user-select:none;
+    outline:none;
 }
 
 #mobilePad{
@@ -103,6 +110,12 @@ body{
     background:#444;
     color:white;
     opacity:0.8;
+
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select:none;
+    -webkit-user-select:none;
+    outline:none;
 }
 
 @media (min-width:900px){
@@ -137,6 +150,12 @@ body{
     margin:10px;
     padding:20px 40px;
     font-size:30px;
+
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select:none;
+    -webkit-user-select:none;
+    outline:none;
 }
 
 </style>
@@ -160,22 +179,34 @@ body{
 
     <div id="mobilePad">
 
-        <button id="upBtn">↑</button>
+        <button id="upBtn" tabindex="-1">
+            ↑
+        </button>
 
         <div>
 
-            <button id="leftBtn">←</button>
+            <button id="leftBtn" tabindex="-1">
+                ←
+            </button>
 
-            <button id="downBtn">↓</button>
+            <button id="downBtn" tabindex="-1">
+                ↓
+            </button>
 
-            <button id="rightBtn">→</button>
+            <button id="rightBtn" tabindex="-1">
+                →
+            </button>
 
         </div>
 
     </div>
 
-    <button id="punchButton">
+    <button
+    id="punchButton"
+    tabindex="-1">
+
         PUNCH
+
     </button>
 
     <div id="startScreen">
@@ -258,10 +289,6 @@ document.getElementById("messageText");
 const nextButton =
 document.getElementById("nextButton");
 
-
-//
-// 主人公
-//
 const player =
 document.getElementById("player");
 
@@ -274,37 +301,17 @@ playerX + "px";
 player.style.top =
 playerY + "px";
 
-
-//
-// スコア
-//
 let score = 0;
 
-
-//
-// 敵
-//
 let enemies = [];
 
-
-//
-// パンチ状態
-//
 let punching = false;
 
-
-//
-// 入力
-//
 let up = false;
 let down = false;
 let left = false;
 let right = false;
 
-
-//
-// マルチプレイ
-//
 let totalPlayers = 1;
 
 let currentPlayer = 1;
@@ -686,10 +693,11 @@ function spawnEnemy(){
         "♪",
         "♫",
         "♬",
-        "♩"
+        "♩",
+        "♭"
     ];
 
-    enemy.innerText =
+    const note =
     notes[
         Math.floor(
             Math.random() *
@@ -697,11 +705,16 @@ function spawnEnemy(){
         )
     ];
 
+    enemy.innerText =
+    note;
+
     game.appendChild(enemy);
 
     enemies.push({
 
         el: enemy,
+
+        note: note,
 
         x:
         window.innerWidth + 100,
@@ -727,15 +740,6 @@ function punch(){
     if(punching) return;
 
     punching = true;
-
-    score -= 10;
-
-    if(score < 0){
-        score = 0;
-    }
-
-    scoreEl.innerText =
-    "Score : " + score;
 
     player.src =
     "images/hero_punch.png";
@@ -789,7 +793,18 @@ function punch(){
 
         if(hit){
 
-            score += 100;
+            if(enemy.note === "♭"){
+
+                score -= 100;
+
+                if(score < 0){
+                    score = 0;
+                }
+
+            }else{
+
+                score += 100;
+            }
 
             scoreEl.innerText =
             "Score : " + score;
