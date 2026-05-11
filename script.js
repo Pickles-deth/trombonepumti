@@ -534,6 +534,8 @@ setInterval(()=>{
 //
 // 開始
 //
+window.selectPlayers =
+selectPlayers;
 gameLoop();
 ```
 
