@@ -4,12 +4,9 @@ document.getElementById("game");
 const scoreEl =
 document.getElementById("score");
 
-const punchButton =
-document.getElementById("punchButton");
-
 
 //
-// 主人公
+// プレイヤー
 //
 const player =
 document.createElement("img");
@@ -19,7 +16,7 @@ player.id = "player";
 player.src =
 "images/hero_idle.png";
 
-let playerX = 150;
+let playerX = 100;
 let playerY = 300;
 
 player.style.left =
@@ -38,16 +35,7 @@ let score = 0;
 
 
 //
-// 入力
-//
-let up = false;
-let down = false;
-let left = false;
-let right = false;
-
-
-//
-// 敵配列
+// 敵
 //
 let enemies = [];
 
@@ -56,113 +44,6 @@ let enemies = [];
 // パンチ状態
 //
 let punching = false;
-
-
-//
-// キーボード
-//
-document.addEventListener(
-"keydown",(e)=>{
-
-    if(e.key === "ArrowUp"){
-        up = true;
-    }
-
-    if(e.key === "ArrowDown"){
-        down = true;
-    }
-
-    if(e.key === "ArrowLeft"){
-        left = true;
-    }
-
-    if(e.key === "ArrowRight"){
-        right = true;
-    }
-
-    if(e.code === "Space"){
-        punch();
-    }
-});
-
-document.addEventListener(
-"keyup",(e)=>{
-
-    if(e.key === "ArrowUp"){
-        up = false;
-    }
-
-    if(e.key === "ArrowDown"){
-        down = false;
-    }
-
-    if(e.key === "ArrowLeft"){
-        left = false;
-    }
-
-    if(e.key === "ArrowRight"){
-        right = false;
-    }
-});
-
-
-//
-// パンチボタン
-//
-punchButton.addEventListener(
-"click",()=>{
-
-    punch();
-
-});
-
-
-//
-// プレイヤー更新
-//
-function updatePlayer(){
-
-    if(up){
-        playerY -= 6;
-    }
-
-    if(down){
-        playerY += 6;
-    }
-
-    if(left){
-        playerX -= 6;
-    }
-
-    if(right){
-        playerX += 6;
-    }
-
-    // 画面制限
-    playerX =
-    Math.max(
-        0,
-        Math.min(
-            window.innerWidth - 120,
-            playerX
-        )
-    );
-
-    playerY =
-    Math.max(
-        0,
-        Math.min(
-            window.innerHeight - 120,
-            playerY
-        )
-    );
-
-    player.style.left =
-    playerX + "px";
-
-    player.style.top =
-    playerY + "px";
-}
 
 
 //
@@ -179,20 +60,15 @@ function spawnEnemy(){
     enemy.className =
     "enemy";
 
-    // 右端から出現
     enemy.x =
     window.innerWidth + 100;
 
-    // ランダムY
     enemy.y =
-    Math.random() *
-    (window.innerHeight - 100);
+    260 + Math.random() * 200;
 
-    // ランダム速度
     enemy.speed =
-    3 + Math.random() * 5;
+    6;
 
-    // 初期位置
     enemy.style.left =
     enemy.x + "px";
 
@@ -218,15 +94,6 @@ function punch(){
     "images/hero_punch.png";
 
     //
-    // パンチ範囲
-    //
-    const punchX =
-    playerX + 180;
-
-    const punchY =
-    playerY + 40;
-
-    //
     // パンチ画像
     //
     const slide =
@@ -238,11 +105,11 @@ function punch(){
     slide.className =
     "slide";
 
-    slide.style.position =
-    "absolute";
+    const punchX =
+    playerX + 120;
 
-    slide.style.width =
-    "180px";
+    const punchY =
+    playerY + 30;
 
     slide.style.left =
     punchX + "px";
@@ -267,15 +134,15 @@ function punch(){
         const hit =
 
         enemy.x <
-        punchX + 180 &&
+        punchX + 200 &&
 
-        enemy.x + 70 >
+        enemy.x + 80 >
         punchX &&
 
         enemy.y <
-        punchY + 80 &&
+        punchY + 100 &&
 
-        enemy.y + 70 >
+        enemy.y + 80 >
         punchY;
 
         if(hit){
@@ -310,8 +177,21 @@ function punch(){
 
         punching = false;
 
-    },250);
+    },200);
 }
+
+
+//
+// キー入力
+//
+document.addEventListener(
+"keydown",(e)=>{
+
+    if(e.code === "Space"){
+
+        punch();
+    }
+});
 
 
 //
@@ -328,18 +208,18 @@ function updateEnemies(){
         const enemy =
         enemies[i];
 
-        // 左へ移動
+        //
+        // 左移動
+        //
         enemy.x -= enemy.speed;
 
-        // 更新
         enemy.style.left =
         enemy.x + "px";
 
-        enemy.style.top =
-        enemy.y + "px";
-
-        // 画面外
-        if(enemy.x < -100){
+        //
+        // 画面外削除
+        //
+        if(enemy.x < -150){
 
             enemy.remove();
 
@@ -353,8 +233,6 @@ function updateEnemies(){
 // メインループ
 //
 function gameLoop(){
-
-    updatePlayer();
 
     updateEnemies();
 
