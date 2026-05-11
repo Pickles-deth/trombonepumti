@@ -49,13 +49,7 @@ body{
     object-fit:contain;
 }
 
-.slide{
-    position:absolute;
-    width:180px;
-    height:70px;
-    object-fit:contain;
-    z-index:9;
-}
+
 
 #punchButton{
     position:absolute;
@@ -278,7 +272,7 @@ function updatePlayer(){
 //
 // 敵生成
 //
-function spawnEnemy(){
+\function spawnEnemy(){
 
     const enemy =
     document.createElement("img");
@@ -289,19 +283,20 @@ function spawnEnemy(){
     enemy.className =
     "enemy";
 
-    // 右から出現
+    // 右端から出現
     enemy.x =
-    window.innerWidth + 100;
+    window.innerWidth;
 
     // ランダム高さ
     enemy.y =
     Math.random() *
-    (window.innerHeight - 100);
+    (window.innerHeight - 120);
 
     // ランダム速度
     enemy.speed =
-    3 + Math.random() * 4;
+    2 + Math.random() * 5;
 
+    // 初期位置
     enemy.style.left =
     enemy.x + "px";
 
@@ -311,6 +306,7 @@ function spawnEnemy(){
     game.appendChild(enemy);
 
     enemies.push(enemy);
+}
 }
 
 
