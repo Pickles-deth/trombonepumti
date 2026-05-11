@@ -3,7 +3,7 @@
 
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0s">
 
 <title>Trombone Punch</title>
 
@@ -320,24 +320,6 @@ function punch(){
 
     player.src =
     "images/hero_punch.png";
-
-    // スライド画像
-    const slide =
-    document.createElement("img");
-
-    slide.src =
-    "images/slide.png";
-
-    slide.className =
-    "slide";
-
-    slide.style.left =
-    (playerX + 80) + "px";
-
-    slide.style.top =
-    (playerY + 20) + "px";
-
-    game.appendChild(slide);
 
     //
     // 当たり判定
