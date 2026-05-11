@@ -3,8 +3,6 @@
 
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Trombone Punch</title>
 
 <style>
@@ -13,7 +11,6 @@ body{
     margin:0;
     overflow:hidden;
     background:#111;
-    font-family:Arial;
 }
 
 #game{
@@ -21,72 +18,49 @@ body{
     width:100vw;
     height:100vh;
     overflow:hidden;
-    background:
-    linear-gradient(#222,#111);
 }
 
 #player{
     position:absolute;
     width:180px;
-    height:180px;
-    left:200px;
-    bottom:60px;
-    z-index:10;
+    left:150px;
+    top:300px;
 }
 
 .enemy{
     position:absolute;
     width:140px;
-    height:140px;
 }
 
-.item{
+.slide{
     position:absolute;
-    width:80px;
-    height:80px;
+    width:220px;
 }
 
-.punch{
-    position:absolute;
-    width:170px;
-    height:70px;
-    z-index:9;
-}
-
-#ui{
+#score{
     position:absolute;
     top:20px;
     left:20px;
     color:white;
+    font-size:40px;
     z-index:100;
 }
 
-#score{
-    font-size:40px;
-}
-
-#combo{
-    font-size:48px;
-    color:gold;
-}
-
 </style>
-
 </head>
 
 <body>
 
 <div id="game">
 
-    <div id="ui">
-        <div id="score">Score : 0</div>
-        <div id="combo"></div>
-    </div>
+<div id="score">
+Score : 0
+</div>
 
-    <img
-        id="player"
-        src="images/hero_idle.png"
-    >
+<img
+id="player"
+src="image/hero_idle.png"
+>
 
 </div>
 
