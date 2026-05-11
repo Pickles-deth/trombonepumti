@@ -7,6 +7,17 @@ document.getElementById("score");
 const punchButton =
 document.getElementById("punchButton");
 
+const idleImage =
+new Image();
+
+idleImage.src =
+"images/hero_idle.png";
+
+const punchImage =
+new Image();
+
+punchImage.src =
+"images/hero_punch.png";
 
 //
 // 主人公
@@ -17,7 +28,7 @@ document.createElement("img");
 player.id = "player";
 
 player.src =
-"images/hero_idle.png";
+idleImage.src;
 
 let playerX = 100;
 let playerY = 300;
@@ -317,7 +328,7 @@ function punch(){
 
         punching = false;
 
-    },150);
+    },500);
 }
 
 
