@@ -83,11 +83,9 @@ body{
     border-radius:50%;
 
     background:red;
-
     color:white;
 
     font-size:26px;
-
     font-weight:bold;
 
     z-index:100;
@@ -195,6 +193,7 @@ body{
     -webkit-user-select:none;
     outline:none;
 }
+
 #ruleArea{
     position:relative;
 
@@ -265,7 +264,6 @@ body{
     #guideCharacter{
         width:120px;
     }
-    @media (max-width:700px){
 
     #startScreen{
 
@@ -278,6 +276,7 @@ body{
         padding-bottom:40px;
     }
 }
+
 </style>
 </head>
 
@@ -342,20 +341,22 @@ body{
         <h2>
             人数を選択
         </h2>
-　　<div id="ruleArea">
 
-    <img
-    id="guideCharacter"
-    src="images/enemy_idle.png">
+        <div id="ruleArea">
 
-    <div id="speechBubble">
+            <img
+            id="guideCharacter"
+            src="images/enemy_idle.png">
 
-        音符をパンチしたら点数ゲット！<br>
-        ♭をパンチしたらマイナス！
+            <div id="speechBubble">
 
-    </div>
+                音符をパンチしたら点数ゲット！<br>
+                ♭をパンチしたらマイナス！
 
-</div>
+            </div>
+
+        </div>
+
         <button id="btn1">
             1 PLAYER
         </button>
@@ -402,6 +403,23 @@ body{
 
 </div>
 
+<audio
+id="titleBgm"
+src="title.mp3"
+loop>
+</audio>
+
+<audio
+id="gameBgm"
+src="game.mp3"
+loop>
+</audio>
+
+<audio
+id="punchSound"
+src="punch.mp3">
+</audio>
+
 <script>
 
 const game =
@@ -443,6 +461,19 @@ document.getElementById("endButton");
 const player =
 document.getElementById("player");
 
+const titleBgm =
+document.getElementById("titleBgm");
+
+const gameBgm =
+document.getElementById("gameBgm");
+
+const punchSound =
+document.getElementById("punchSound");
+
+titleBgm.volume = 0.5;
+gameBgm.volume = 0.5;
+punchSound.volume = 0.7;
+
 let playerX = 100;
 let playerY = 300;
 
@@ -475,11 +506,9 @@ let gameRunning = false;
 
 let timerInterval;
 
-
-//
-// 人数選択
-//
 function selectPlayers(num){
+
+    titleBgm.play();
 
     totalPlayers = num;
 
@@ -497,10 +526,6 @@ function selectPlayers(num){
     showPlayerStart();
 }
 
-
-//
-// ボタン
-//
 document.getElementById("btn1")
 .addEventListener("click",()=>{
 
@@ -522,10 +547,6 @@ document.getElementById("btn3")
 
 });
 
-
-//
-// 開始画面
-//
 function showPlayerStart(){
 
     messageScreen.style.display =
@@ -537,10 +558,6 @@ function showPlayerStart(){
     " START";
 }
 
-
-//
-// START
-//
 nextButton.addEventListener(
 "click",()=>{
 
@@ -551,25 +568,18 @@ nextButton.addEventListener(
 
 });
 
-
-//
-// REPLAY
-//
 replayButton.addEventListener(
 "click",()=>{
+
+    gameBgm.pause();
 
     resultScreen.style.display =
     "none";
 
     startScreen.style.display =
     "flex";
-
 });
 
-
-//
-// END
-//
 endButton.addEventListener(
 "click",()=>{
 
@@ -577,11 +587,13 @@ endButton.addEventListener(
 
 });
 
-
-//
-// ターン開始
-//
 function startTurn(){
+
+    titleBgm.pause();
+
+    gameBgm.currentTime = 0;
+
+    gameBgm.play();
 
     score = 0;
 
@@ -624,10 +636,6 @@ function startTurn(){
     },1000);
 }
 
-
-//
-// ターン終了
-//
 function endTurn(){
 
     clearInterval(timerInterval);
@@ -649,11 +657,9 @@ function endTurn(){
     }
 }
 
-
-//
-// 結果
-//
 function showResult(){
+
+    gameBgm.pause();
 
     resultScreen.style.display =
     "flex";
@@ -676,10 +682,6 @@ function showResult(){
     html;
 }
 
-
-//
-// キーボード
-//
 document.addEventListener(
 "keydown",(e)=>{
 
@@ -725,10 +727,6 @@ document.addEventListener(
     }
 });
 
-
-//
-// スマホ操作
-//
 const upBtn =
 document.getElementById("upBtn");
 
@@ -797,10 +795,6 @@ rightBtn.addEventListener(
 
 });
 
-
-//
-// パンチ
-//
 punchButton.addEventListener(
 "click",()=>{
 
@@ -808,10 +802,6 @@ punchButton.addEventListener(
 
 });
 
-
-//
-// プレイヤー更新
-//
 function updatePlayer(){
 
     if(up){
@@ -859,10 +849,6 @@ function updatePlayer(){
     playerY + "px";
 }
 
-
-//
-// 敵生成
-//
 function spawnEnemy(){
 
     const enemy =
@@ -911,15 +897,15 @@ function spawnEnemy(){
     });
 }
 
-
-//
-// パンチ
-//
 function punch(){
 
     if(!gameRunning) return;
 
     if(punching) return;
+
+    punchSound.currentTime = 0;
+
+    punchSound.play();
 
     punching = true;
 
@@ -1007,10 +993,6 @@ function punch(){
     },500);
 }
 
-
-//
-// 敵更新
-//
 function updateEnemies(){
 
     for(
@@ -1039,10 +1021,6 @@ function updateEnemies(){
     }
 }
 
-
-//
-// メインループ
-//
 function gameLoop(){
 
     updatePlayer();
@@ -1054,10 +1032,6 @@ function gameLoop(){
     );
 }
 
-
-//
-// 敵スポーン
-//
 setInterval(()=>{
 
     if(gameRunning){
@@ -1067,10 +1041,6 @@ setInterval(()=>{
 
 },700);
 
-
-//
-// 開始
-//
 gameLoop();
 
 </script>
