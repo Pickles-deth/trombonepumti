@@ -62,15 +62,31 @@ body{
     border-radius:10px;
 }
 
-.slide{
+#punchButton{
     position:absolute;
 
-    width:180px;
-    height:40px;
+    right:30px;
+    bottom:30px;
 
-    background:yellow;
+    width:120px;
+    height:120px;
 
-    z-index:50;
+    border:none;
+    border-radius:50%;
+
+    background:red;
+    color:white;
+
+    font-size:28px;
+    font-weight:bold;
+
+    z-index:100;
+
+    cursor:pointer;
+}
+
+#punchButton:active{
+    transform:scale(0.95);
 }
 
 </style>
@@ -83,6 +99,10 @@ body{
     <div id="score">
         Score : 0
     </div>
+
+    <button id="punchButton">
+        PUNCH
+    </button>
 
 </div>
 
