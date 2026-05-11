@@ -187,7 +187,77 @@ body{
     -webkit-user-select:none;
     outline:none;
 }
+#ruleArea{
+    position:relative;
 
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    margin:30px 0;
+}
+
+#guideCharacter{
+    width:180px;
+    height:auto;
+}
+
+#speechBubble{
+    position:relative;
+
+    margin-left:20px;
+
+    padding:20px 28px;
+
+    background:white;
+
+    color:black;
+
+    font-size:28px;
+
+    border-radius:20px;
+
+    max-width:420px;
+
+    line-height:1.5;
+}
+
+#speechBubble::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:-20px;
+    top:40px;
+
+    border-width:12px 20px 12px 0;
+
+    border-style:solid;
+
+    border-color:
+    transparent white transparent transparent;
+}
+
+@media (max-width:700px){
+
+    #ruleArea{
+        flex-direction:column;
+    }
+
+    #speechBubble{
+        margin-left:0;
+        margin-top:20px;
+        font-size:20px;
+        max-width:90%;
+    }
+
+    #guideCharacter{
+        width:120px;
+    }
+}
 </style>
 </head>
 
@@ -252,7 +322,20 @@ body{
         <h2>
             人数を選択
         </h2>
+　　<div id="ruleArea">
 
+    <img
+    id="guideCharacter"
+    src="images/enemy_idle.png">
+
+    <div id="speechBubble">
+
+        音符をパンチしたら点数ゲット！<br>
+        ♭をパンチしたらマイナス！
+
+    </div>
+
+</div>
         <button id="btn1">
             1 PLAYER
         </button>
