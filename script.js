@@ -16,6 +16,9 @@ document.createElement("img");
 
 player.id = "player";
 
+//
+// 最初の画像
+//
 player.src =
 "images/hero_idle.png";
 
@@ -44,13 +47,13 @@ let enemies = [];
 
 
 //
-// パンチ状態
+// パンチ中
 //
 let punching = false;
 
 
 //
-// 入力
+// 移動入力
 //
 let up = false;
 let down = false;
@@ -167,9 +170,6 @@ function updatePlayer(){
         window.innerHeight - 140;
     }
 
-    //
-    // 更新
-    //
     player.style.left =
     playerX + "px";
 
@@ -184,10 +184,7 @@ function updatePlayer(){
 function spawnEnemy(){
 
     const enemy =
-    document.createElement("img");
-
-    enemy.src =
-    "images/enemy_idle.png";
+    document.createElement("div");
 
     enemy.className =
     "enemy";
@@ -196,20 +193,20 @@ function spawnEnemy(){
     // 右端から出現
     //
     enemy.x =
-    window.innerWidth + 200;
+    window.innerWidth + 100;
 
     //
     // ランダム高さ
     //
     enemy.y =
     Math.random() *
-    (window.innerHeight - 250);
+    (window.innerHeight - 100);
 
     //
     // ランダム速度
     //
     enemy.speed =
-    3 + Math.random() * 5;
+    3 + Math.random() * 4;
 
     //
     // 初期位置
@@ -220,18 +217,9 @@ function spawnEnemy(){
     enemy.style.top =
     enemy.y + "px";
 
-    //
-    // 追加
-    //
     game.appendChild(enemy);
 
     enemies.push(enemy);
-
-    console.log(
-        "spawn",
-        enemy.x,
-        enemy.y
-    );
 }
 
 
@@ -250,10 +238,16 @@ function punch(){
     console.log("PUNCH!");
 
     //
-    // パンチ画像
+    // 画像変更
     //
     player.src =
     "images/hero_punch.png";
+
+    //
+    // テスト用
+    //
+    player.style.opacity =
+    "0.5";
 
     //
     // パンチ範囲
@@ -286,15 +280,13 @@ function punch(){
         enemy.x;
 
         const enemyRight =
-        enemy.x +
-        enemy.offsetWidth;
+        enemy.x + 80;
 
         const enemyTop =
         enemy.y;
 
         const enemyBottom =
-        enemy.y +
-        enemy.offsetHeight;
+        enemy.y + 80;
 
         const hit =
 
@@ -334,8 +326,14 @@ function punch(){
     //
     setTimeout(()=>{
 
+        //
+        // 元画像へ
+        //
         player.src =
         "images/hero_idle.png";
+
+        player.style.opacity =
+        "1";
 
         punching = false;
 
@@ -362,21 +360,13 @@ function updateEnemies(){
         //
         enemy.x -= enemy.speed;
 
-        //
-        // 位置更新
-        //
         enemy.style.left =
         enemy.x + "px";
-
-        enemy.style.top =
-        enemy.y + "px";
-
-        console.log(enemy.x);
 
         //
         // 画面外削除
         //
-        if(enemy.x < -300){
+        if(enemy.x < -100){
 
             enemy.remove();
 
