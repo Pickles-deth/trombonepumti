@@ -3,7 +3,9 @@
 
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>Trombone Punch</title>
 
@@ -13,7 +15,7 @@ body{
     margin:0;
     overflow:hidden;
     background:#111;
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
 }
 
 #game{
@@ -21,72 +23,57 @@ body{
     width:100vw;
     height:100vh;
     overflow:hidden;
+
     background:
     linear-gradient(#222,#000);
 }
 
 #score{
     position:absolute;
+
     top:20px;
     left:20px;
+
     color:white;
-    font-size:40px;
+    font-size:50px;
+
     z-index:100;
 }
 
 #player{
     position:absolute;
-    width:120px;
-    height:120px;
+
+    width:140px;
+    height:140px;
+
     object-fit:contain;
-    z-index:10;
+
+    z-index:20;
 }
 
 .enemy{
     position:absolute;
-    width:70px;
-    height:70px;
-    object-fit:contain;
+
+    width:80px;
+    height:80px;
+
+    background:red;
+
+    border-radius:10px;
 }
 
 .slide{
     position:absolute;
+
     width:180px;
-    height:80px;
-    object-fit:contain;
-    z-index:20;
-}
+    height:40px;
 
+    background:yellow;
 
-#punchButton{
-    position:absolute;
-
-    right:30px;
-    bottom:30px;
-
-    width:120px;
-    height:120px;
-
-    border:none;
-    border-radius:50%;
-
-    background:red;
-    color:white;
-
-    font-size:28px;
-    font-weight:bold;
-
-    z-index:100;
-
-    cursor:pointer;
-}
-
-#punchButton:active{
-    transform:scale(1.5);
+    z-index:50;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -97,366 +84,9 @@ body{
         Score : 0
     </div>
 
-    <button id="punchButton">
-        PUNCH
-    </button>
-
 </div>
 
-<script>
-
-const game =
-document.getElementById("game");
-
-const scoreEl =
-document.getElementById("score");
-
-const punchButton =
-document.getElementById("punchButton");
-
-
-//
-// 主人公生成
-//
-const player =
-document.createElement("img");
-
-player.id = "player";
-
-player.src =
-"images/hero_idle.png";
-
-let playerX = 150;
-let playerY = 300;
-
-player.style.left =
-playerX + "px";
-
-player.style.top =
-playerY + "px";
-
-game.appendChild(player);
-
-
-//
-// スコア
-//
-let score = 0;
-
-
-//
-// 入力
-//
-let up = false;
-let down = false;
-let left = false;
-let right = false;
-
-
-//
-// 敵配列
-//
-let enemies = [];
-
-
-//
-// パンチ状態
-//
-let punching = false;
-
-
-//
-// キーボード
-//
-document.addEventListener(
-"keydown",(e)=>{
-
-    if(e.key === "ArrowUp"){
-        up = true;
-    }
-
-    if(e.key === "ArrowDown"){
-        down = true;
-    }
-
-    if(e.key === "ArrowLeft"){
-        left = true;
-    }
-
-    if(e.key === "ArrowRight"){
-        right = true;
-    }
-
-    if(e.code === "Space"){
-        punch();
-    }
-});
-
-document.addEventListener(
-"keyup",(e)=>{
-
-    if(e.key === "ArrowUp"){
-        up = false;
-    }
-
-    if(e.key === "ArrowDown"){
-        down = false;
-    }
-
-    if(e.key === "ArrowLeft"){
-        left = false;
-    }
-
-    if(e.key === "ArrowRight"){
-        right = false;
-    }
-});
-
-
-//
-// パンチボタン
-//
-punchButton.addEventListener(
-"click",()=>{
-
-    punch();
-
-});
-
-
-//
-// プレイヤー更新
-//
-function updatePlayer(){
-
-    if(up){
-        playerY -= 6;
-    }
-
-    if(down){
-        playerY += 6;
-    }
-
-    if(left){
-        playerX -= 6;
-    }
-
-    if(right){
-        playerX += 6;
-    }
-
-    // 画面制限
-    if(playerX < 0){
-        playerX = 0;
-    }
-
-    if(playerX >
-       window.innerWidth - 120){
-
-        playerX =
-        window.innerWidth - 120;
-    }
-
-    if(playerY < 0){
-        playerY = 0;
-    }
-
-    if(playerY >
-       window.innerHeight - 120){
-
-        playerY =
-        window.innerHeight - 120;
-    }
-
-    player.style.left =
-    playerX + "px";
-
-    player.style.top =
-    playerY + "px";
-}
-
-
-//
-// 敵生成
-//
-function spawnEnemy(){
-
-    const enemy =
-    document.createElement("img");
-
-    enemy.src =
-    "images/enemy_idle.png";
-
-    enemy.className =
-    "enemy";
-
-    //
-    // 数値を直接持たせる
-    //
-    enemy.x =
-    window.innerWidth + 100;
-
-    enemy.y =
-    Math.random() *
-    (window.innerHeight - 120);
-
-    enemy.speed =
-    3 + Math.random() * 4;
-
-    //
-    // 最初の位置
-    //
-    enemy.style.position =
-    "absolute";
-
-    enemy.style.left =
-    enemy.x + "px";
-
-    enemy.style.top =
-    enemy.y + "px";
-
-    game.appendChild(enemy);
-
-    enemies.push(enemy);
-
-    console.log(
-        "enemy spawned",
-        enemy.x,
-        enemy.y
-    );
-}
-
-
-//
-// パンチ
-//
-function punch(){
-
-    if(punching) return;
-
-    punching = true;
-
-    player.src =
-    "images/hero_punch.png";
-
-    //
-    // 当たり判定
-    //
-    for(let i =
-        enemies.length - 1;
-        i >= 0;
-        i--){
-
-        const enemy =
-        enemies[i];
-
-        const hitX =
-
-        enemy.x <
-        playerX + 260 &&
-
-        enemy.x >
-        playerX + 100;
-
-        const hitY =
-
-        enemy.y <
-        playerY + 100 &&
-
-        enemy.y >
-        playerY - 50;
-
-        if(hitX && hitY){
-
-            score += 100;
-
-            scoreEl.innerText =
-            "Score : " + score;
-
-            enemy.src =
-            "images/enemy_hit.png";
-
-            setTimeout(()=>{
-
-                enemy.remove();
-
-            },100);
-
-            enemies.splice(i,1);
-        }
-    }
-
- setTimeout(()=>{
-
-    player.src =
-    "images/hero_idle.png";
-
-    punching = false;
-
-},700);
-}
-
-
-//
-// 敵更新
-//
-function updateEnemies(){
-
-    for(let i =
-        enemies.length - 1;
-        i >= 0;
-        i--){
-
-        const enemy =
-        enemies[i];
-
-        // 左移動
-        enemy.x -= enemy.speed;
-
-        enemy.style.left =
-        enemy.x + "px";
-
-        // 画面外
-        if(enemy.x < -100){
-
-            enemy.remove();
-
-            enemies.splice(i,1);
-        }
-    }
-}
-
-
-//
-// メインループ
-//
-function gameLoop(){
-
-    updatePlayer();
-
-    updateEnemies();
-
-    requestAnimationFrame(
-    gameLoop);
-}
-
-
-//
-// 敵スポーン
-//
-setInterval(()=>{
-
-    spawnEnemy();
-
-},1200);
-
-
-//
-// 開始
-//
-gameLoop();
-
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
