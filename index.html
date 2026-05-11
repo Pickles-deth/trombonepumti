@@ -47,18 +47,20 @@ body{
 
 #player{
     position:absolute;
-    width:140px;
-    height:140px;
-    object-fit:contain;
+    width:100px;
+    height:100px;
+    font-size:90px;
     z-index:20;
+    user-select:none;
 }
 
 .enemy{
     position:absolute;
-    width:120px;
-    height:120px;
-    object-fit:contain;
+    width:80px;
+    height:80px;
+    font-size:70px;
     z-index:10;
+    user-select:none;
 }
 
 #punchButton{
@@ -205,24 +207,17 @@ document.getElementById("nextButton");
 
 
 //
-// 主人公
+// プレイヤー
 //
 const player =
-document.createElement("img");
+document.createElement("div");
 
 player.id = "player";
 
-player.src =
-"images/hero_idle.png";
+player.innerText = "🎺";
 
 let playerX = 100;
 let playerY = 300;
-
-player.style.left =
-playerX + "px";
-
-player.style.top =
-playerY + "px";
 
 game.appendChild(player);
 
@@ -328,7 +323,7 @@ function showPlayerStart(){
 
 
 //
-// スタートボタン
+// START
 //
 nextButton.addEventListener(
 "click",()=>{
@@ -346,9 +341,6 @@ nextButton.addEventListener(
 //
 function startTurn(){
 
-    playerX = 100;
-    playerY = 300;
-
     score = 0;
 
     scoreEl.innerText =
@@ -359,15 +351,20 @@ function startTurn(){
     timerEl.innerText =
     timeLeft;
 
+    playerX = 100;
+    playerY = 300;
+
     gameRunning = true;
 
     enemies.forEach(enemy=>{
 
-        enemy.remove();
+        enemy.el.remove();
 
     });
 
     enemies = [];
+
+    clearInterval(timerInterval);
 
     timerInterval =
     setInterval(()=>{
@@ -412,7 +409,7 @@ function endTurn(){
 
 
 //
-// 結果表示
+// 結果
 //
 function showResult(){
 
@@ -465,7 +462,6 @@ document.addEventListener(
         punch();
     }
 });
-
 
 document.addEventListener(
 "keyup",(e)=>{
@@ -529,17 +525,17 @@ function updatePlayer(){
     }
 
     if(playerX >
-       window.innerWidth - 140){
+       window.innerWidth - 100){
 
         playerX =
-        window.innerWidth - 140;
+        window.innerWidth - 100;
     }
 
     if(playerY >
-       window.innerHeight - 140){
+       window.innerHeight - 100){
 
         playerY =
-        window.innerHeight - 140;
+        window.innerHeight - 100;
     }
 
     player.style.left =
@@ -556,33 +552,43 @@ function updatePlayer(){
 function spawnEnemy(){
 
     const enemy =
-    document.createElement("img");
-
-    enemy.src =
-    "images/enemy_idle.png";
+    document.createElement("div");
 
     enemy.className =
     "enemy";
 
-    enemy.x =
-    window.innerWidth + 200;
+    const notes = [
+        "♪",
+        "♫",
+        "♬",
+        "♩"
+    ];
 
-    enemy.y =
-    Math.random() *
-    (window.innerHeight - 250);
-
-    enemy.speed =
-    3 + Math.random() * 5;
-
-    enemy.style.left =
-    enemy.x + "px";
-
-    enemy.style.top =
-    enemy.y + "px";
+    enemy.innerText =
+    notes[
+        Math.floor(
+            Math.random() *
+            notes.length
+        )
+    ];
 
     game.appendChild(enemy);
 
-    enemies.push(enemy);
+    enemies.push({
+
+        el: enemy,
+
+        x:
+        window.innerWidth + 100,
+
+        y:
+        Math.random() *
+        (window.innerHeight - 120),
+
+        speed:
+        3 + Math.random() * 4
+
+    });
 }
 
 
@@ -597,20 +603,19 @@ function punch(){
 
     punching = true;
 
-    player.src =
-    "images/hero_punch.png";
+    player.innerText = "💥";
 
     const punchLeft =
-    playerX + 90;
+    playerX + 50;
 
     const punchRight =
-    playerX + 240;
+    playerX + 170;
 
     const punchTop =
-    playerY + 20;
+    playerY;
 
     const punchBottom =
-    playerY + 120;
+    playerY + 100;
 
     for(
         let i = enemies.length - 1;
@@ -625,13 +630,13 @@ function punch(){
         enemy.x;
 
         const enemyRight =
-        enemy.x + 120;
+        enemy.x + 80;
 
         const enemyTop =
         enemy.y;
 
         const enemyBottom =
-        enemy.y + 120;
+        enemy.y + 80;
 
         const hit =
 
@@ -654,7 +659,7 @@ function punch(){
             scoreEl.innerText =
             "Score : " + score;
 
-            enemy.remove();
+            enemy.el.remove();
 
             enemies.splice(i,1);
         }
@@ -662,12 +667,11 @@ function punch(){
 
     setTimeout(()=>{
 
-        player.src =
-        "images/hero_idle.png";
+        player.innerText = "🎺";
 
         punching = false;
 
-    },500);
+    },300);
 }
 
 
@@ -687,15 +691,15 @@ function updateEnemies(){
 
         enemy.x -= enemy.speed;
 
-        enemy.style.left =
+        enemy.el.style.left =
         enemy.x + "px";
 
-        enemy.style.top =
+        enemy.el.style.top =
         enemy.y + "px";
 
-        if(enemy.x < -300){
+        if(enemy.x < -100){
 
-            enemy.remove();
+            enemy.el.remove();
 
             enemies.splice(i,1);
         }
