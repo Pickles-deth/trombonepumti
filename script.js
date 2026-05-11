@@ -172,39 +172,35 @@ function updatePlayer(){
 //
 // 敵生成
 //
-function spawnEnemy(){
+function updateEnemies(){
 
-    const enemy =
-    document.createElement("img");
+    for(
+        let i = enemies.length - 1;
+        i >= 0;
+        i--
+    ){
 
-    enemy.src =
-    "images/enemy_idle.png";
+        const enemy =
+        enemies[i];
 
-    enemy.className =
-    "enemy";
+        // 左へ移動
+        enemy.x -= enemy.speed;
 
-    // 右から出現
-    enemy.x =
-    window.innerWidth + 100;
+        // 位置更新
+        enemy.style.left =
+        enemy.x + "px";
 
-    // ランダム高さ
-    enemy.y =
-    Math.random() *
-    (window.innerHeight - 100);
+        enemy.style.top =
+        enemy.y + "px";
 
-    // ランダム速度
-    enemy.speed =
-    3 + Math.random() * 4;
+        // 左画面外
+        if(enemy.x < -150){
 
-    enemy.style.left =
-    enemy.x + "px";
+            enemy.remove();
 
-    enemy.style.top =
-    enemy.y + "px";
-
-    game.appendChild(enemy);
-
-    enemies.push(enemy);
+            enemies.splice(i,1);
+        }
+    }
 }
 
 
