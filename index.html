@@ -3,6 +3,7 @@
 
 <head>
 <meta charset="UTF-8">
+
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
@@ -69,4 +70,146 @@ body{
 .enemy{
     position:absolute;
 
+    width:120px;
+
+    height:auto;
+
+    object-fit:contain;
+
+    z-index:10;
+}
+
+#punchButton{
+    position:absolute;
+
+    right:30px;
+    bottom:30px;
+
+    width:120px;
+    height:120px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:red;
+
+    color:white;
+
+    font-size:28px;
+
+    font-weight:bold;
+
+    z-index:100;
+
+    cursor:pointer;
+}
+
+#startScreen,
+#messageScreen,
+#resultScreen{
+    position:absolute;
+
+    width:100%;
+    height:100%;
+
+    background:rgba(0,0,0,0.9);
+
+    z-index:500;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:white;
+}
+
+#messageScreen,
+#resultScreen{
+    display:none;
+}
+
+#startScreen button,
+#messageScreen button{
+    margin:10px;
+
+    padding:20px 40px;
+
+    font-size:30px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+    <div id="score">
+        Score : 0
+    </div>
+
+    <div id="timer">
+        30
+    </div>
+
+    <button id="punchButton">
+        PUNCH
+    </button>
+
+    <div id="startScreen">
+
+        <h1>
+            Trombone Punch
+        </h1>
+
+        <h2>
+            人数を選択
+        </h2>
+
+        <button onclick="selectPlayers(1)">
+            1 PLAYER
+        </button>
+
+        <button onclick="selectPlayers(2)">
+            2 PLAYERS
+        </button>
+
+        <button onclick="selectPlayers(3)">
+            3 PLAYERS
+        </button>
+
+    </div>
+
+    <div id="messageScreen">
+
+        <h1 id="messageText">
+            PLAYER 1 START
+        </h1>
+
+        <button id="nextButton">
+            START
+        </button>
+
+    </div>
+
+    <div id="resultScreen">
+
+        <h1>
+            RESULT
+        </h1>
+
+        <div id="resultText"></div>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
 </html>
