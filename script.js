@@ -1,39 +1,31 @@
-console.log("GAME START");
-
 const game = document.getElementById("game");
 const player = document.getElementById("player");
-
 const scoreEl = document.getElementById("score");
-const comboEl = document.getElementById("combo");
 
 let score = 0;
-let combo = 0;
 
-let playerX = 200;
+let playerX = 150;
+let playerY = 300;
 
-let moveLeft = false;
-let moveRight = false;
+let up = false;
+let down = false;
+let left = false;
+let right = false;
 
 let punching = false;
 
-const PLAYER_SPEED = 8;
-
 let enemies = [];
-let items = [];
 
 
 //
-// キーボード
+// キー入力
 //
 document.addEventListener("keydown",(e)=>{
 
-    if(e.key === "ArrowLeft"){
-        moveLeft = true;
-    }
-
-    if(e.key === "ArrowRight"){
-        moveRight = true;
-    }
+    if(e.key === "ArrowUp") up = true;
+    if(e.key === "ArrowDown") down = true;
+    if(e.key === "ArrowLeft") left = true;
+    if(e.key === "ArrowRight") right = true;
 
     if(e.code === "Space"){
         punch();
@@ -42,38 +34,25 @@ document.addEventListener("keydown",(e)=>{
 
 document.addEventListener("keyup",(e)=>{
 
-    if(e.key === "ArrowLeft"){
-        moveLeft = false;
-    }
-
-    if(e.key === "ArrowRight"){
-        moveRight = false;
-    }
+    if(e.key === "ArrowUp") up = false;
+    if(e.key === "ArrowDown") down = false;
+    if(e.key === "ArrowLeft") left = false;
+    if(e.key === "ArrowRight") right = false;
 });
 
 
 //
-// プレイヤー更新
+// プレイヤー移動
 //
 function updatePlayer(){
 
-    if(moveLeft){
-        playerX -= PLAYER_SPEED;
-    }
-
-    if(moveRight){
-        playerX += PLAYER_SPEED;
-    }
-
-    if(playerX < 0){
-        playerX = 0;
-    }
-
-    if(playerX > window.innerWidth - 180){
-        playerX = window.innerWidth - 180;
-    }
+    if(up) playerY -= 6;
+    if(down) playerY += 6;
+    if(left) playerX -= 6;
+    if(right) playerX += 6;
 
     player.style.left = playerX + "px";
+    player.style.top = playerY + "px";
 }
 
 
@@ -84,14 +63,12 @@ function spawnEnemy(){
 
     const enemy = document.createElement("img");
 
-    enemy.src = "assets/enemy_idle.png";
+    enemy.src = "image/enemy_idle.png";
 
     enemy.className = "enemy";
 
-    enemy.x = window.innerWidth + 100;
-    enemy.y = window.innerHeight - 200;
-
-    enemy.speed = 5 + Math.random() * 3;
+    enemy.x = window.innerWidth;
+    enemy.y = Math.random() * 500 + 100;
 
     enemy.style.left = enemy.x + "px";
     enemy.style.top = enemy.y + "px";
@@ -99,31 +76,6 @@ function spawnEnemy(){
     game.appendChild(enemy);
 
     enemies.push(enemy);
-}
-
-
-//
-// アイテム生成
-//
-function spawnItem(){
-
-    const item = document.createElement("img");
-
-    item.src = "assets/item_good.png";
-
-    item.className = "item";
-
-    item.x = window.innerWidth + 100;
-    item.y = 150 + Math.random() * 250;
-
-    item.speed = 4;
-
-    item.style.left = item.x + "px";
-    item.style.top = item.y + "px";
-
-    game.appendChild(item);
-
-    items.push(item);
 }
 
 
@@ -136,49 +88,46 @@ function punch(){
 
     punching = true;
 
-    player.src = "assets/hero_punch.png";
+    player.src = "image/hero_punch.png";
 
-    // パンチ画像
-    const punchImg = document.createElement("img");
+    // スライド表示
+    const slide = document.createElement("img");
 
-    punchImg.src = "assets/punch.png";
+    slide.src = "image/slide.png";
 
-    punchImg.className = "punch";
+    slide.className = "slide";
 
-    punchImg.style.left =
-        (playerX + 120) + "px";
+    slide.style.left = (playerX + 120) + "px";
+    slide.style.top = (playerY + 40) + "px";
 
-    punchImg.style.top =
-        (window.innerHeight - 170) + "px";
-
-    game.appendChild(punchImg);
+    game.appendChild(slide);
 
     // 当たり判定
     for(let i = enemies.length - 1; i >= 0; i--){
 
         const enemy = enemies[i];
 
-        const dx =
-          Math.abs(enemy.x - (playerX + 140));
+        const hitX =
+            enemy.x < playerX + 320 &&
+            enemy.x > playerX + 150;
 
-        if(dx < 140){
+        const hitY =
+            enemy.y < playerY + 120 &&
+            enemy.y > playerY - 50;
 
-            combo++;
+        // スライド先端が当たった
+        if(hitX && hitY){
 
-            score += 100 * combo;
+            score += 100;
+
+            scoreEl.innerText =
+            "Score : " + score;
 
             enemy.src =
-              "assets/enemy_hit.png";
-
-            enemy.style.transform =
-              "scale(1.3)";
-
-            updateUI();
+            "image/enemy_hit.png";
 
             setTimeout(()=>{
-
                 enemy.remove();
-
             },100);
 
             enemies.splice(i,1);
@@ -187,18 +136,19 @@ function punch(){
 
     setTimeout(()=>{
 
-        punchImg.remove();
+        slide.remove();
 
-        player.src = "assets/hero_idle.png";
+        player.src =
+        "image/hero_idle.png";
 
         punching = false;
 
-    },120);
+    },150);
 }
 
 
 //
-// 敵更新
+// 敵移動
 //
 function updateEnemies(){
 
@@ -206,88 +156,17 @@ function updateEnemies(){
 
         const enemy = enemies[i];
 
-        enemy.x -= enemy.speed;
+        enemy.x -= 5;
 
-        enemy.style.left = enemy.x + "px";
+        enemy.style.left =
+        enemy.x + "px";
 
-        // 接触
-        if(enemy.x < playerX){
-
-            combo = 0;
-
-            score -= 200;
-
-            updateUI();
-
-            enemy.remove();
-
-            enemies.splice(i,1);
-        }
-
-        // 画面外
         if(enemy.x < -200){
 
             enemy.remove();
 
             enemies.splice(i,1);
         }
-    }
-}
-
-
-//
-// アイテム更新
-//
-function updateItems(){
-
-    for(let i = items.length - 1; i >= 0; i--){
-
-        const item = items[i];
-
-        item.x -= item.speed;
-
-        item.style.left = item.x + "px";
-
-        const dx =
-          Math.abs(item.x - playerX);
-
-        if(dx < 100){
-
-            score += 500;
-
-            updateUI();
-
-            item.remove();
-
-            items.splice(i,1);
-        }
-
-        if(item.x < -100){
-
-            item.remove();
-
-            items.splice(i,1);
-        }
-    }
-}
-
-
-//
-// UI更新
-//
-function updateUI(){
-
-    scoreEl.innerText =
-      "Score : " + score;
-
-    if(combo >= 2){
-
-        comboEl.innerText =
-          combo + " COMBO!";
-
-    }else{
-
-        comboEl.innerText = "";
     }
 }
 
@@ -301,31 +180,21 @@ function gameLoop(){
 
     updateEnemies();
 
-    updateItems();
-
     requestAnimationFrame(gameLoop);
 }
 
 
 //
-// スポーン
+// 敵スポーン
 //
 setInterval(()=>{
 
     spawnEnemy();
 
-},1200);
-
-setInterval(()=>{
-
-    spawnItem();
-
-},5000);
+},1500);
 
 
 //
 // 開始
 //
-updateUI();
-
 gameLoop();
