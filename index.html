@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Trombone Punch</title>
 
 <style>
+
 body{
     margin:0;
     overflow:hidden;
     background:#111;
     font-family:Arial;
-    color:white;
 }
 
 #game{
@@ -20,289 +22,75 @@ body{
     height:100vh;
     overflow:hidden;
     background:
-      linear-gradient(#222,#111);
+    linear-gradient(#222,#111);
 }
 
 #player{
     position:absolute;
-    width:120px;
-    height:120px;
+    width:180px;
+    height:180px;
     left:200px;
-    bottom:80px;
-    transition:transform 0.08s;
+    bottom:60px;
+    z-index:10;
 }
 
 .enemy{
     position:absolute;
-    width:90px;
-    height:90px;
+    width:140px;
+    height:140px;
 }
 
 .item{
     position:absolute;
-    width:60px;
-    height:60px;
+    width:80px;
+    height:80px;
+}
+
+.punch{
+    position:absolute;
+    width:170px;
+    height:70px;
+    z-index:9;
 }
 
 #ui{
     position:absolute;
     top:20px;
     left:20px;
+    color:white;
     z-index:100;
-    font-size:28px;
 }
 
-.hit{
-    animation:hit 0.1s;
-}
-
-@keyframes hit{
-    0%{transform:scale(1);}
-    50%{transform:scale(1.3);}
-    100%{transform:scale(1);}
-}
-
-.combo{
-    color:gold;
+#score{
     font-size:40px;
 }
+
+#combo{
+    font-size:48px;
+    color:gold;
+}
+
 </style>
+
 </head>
 
 <body>
 
 <div id="game">
 
-<div id="ui">
-<div id="score">Score: 0</div>
-<div id="combo"></div>
+    <div id="ui">
+        <div id="score">Score : 0</div>
+        <div id="combo"></div>
+    </div>
+
+    <img
+        id="player"
+        src="image/hero_idle.png"
+    >
+
 </div>
 
-<img id="player"
-src="https://cdn-icons-png.flaticon.com/512/727/727245.png">
+<script src="script.js"></script>
 
-</div>
-
-<script>
-
-const game = document.getElementById("game");
-const player = document.getElementById("player");
-
-let score = 0;
-let combo = 0;
-
-let playerX = 200;
-let speed = 8;
-
-let keys = {};
-
-let enemies = [];
-let items = [];
-
-let punching = false;
-
-document.addEventListener("keydown",(e)=>{
-    keys[e.key] = true;
-
-    if(e.code==="Space"){
-        punch();
-    }
-});
-
-document.addEventListener("keyup",(e)=>{
-    keys[e.key] = false;
-});
-
-function updatePlayer(){
-
-    if(keys["ArrowLeft"]){
-        playerX -= speed;
-    }
-
-    if(keys["ArrowRight"]){
-        playerX += speed;
-    }
-
-    if(playerX < 0) playerX = 0;
-    if(playerX > window.innerWidth-120)
-        playerX = window.innerWidth-120;
-
-    player.style.left = playerX+"px";
-}
-
-function spawnEnemy(){
-
-    const enemy = document.createElement("img");
-
-    enemy.src =
-    "https://cdn-icons-png.flaticon.com/512/616/616408.png";
-
-    enemy.className = "enemy";
-
-    enemy.x = window.innerWidth + 100;
-    enemy.y = window.innerHeight - 170;
-
-    enemy.speed = 4 + Math.random()*5;
-
-    enemy.style.left = enemy.x+"px";
-    enemy.style.top = enemy.y+"px";
-
-    game.appendChild(enemy);
-
-    enemies.push(enemy);
-}
-
-function spawnItem(good=true){
-
-    const item = document.createElement("div");
-
-    item.className = "item";
-
-    item.innerHTML = good ? "➕" : "➖";
-
-    item.style.fontSize = "50px";
-
-    item.x = window.innerWidth + 100;
-    item.y = 200 + Math.random()*300;
-
-    item.speed = 5;
-
-    item.good = good;
-
-    item.style.left = item.x+"px";
-    item.style.top = item.y+"px";
-
-    game.appendChild(item);
-
-    items.push(item);
-}
-
-function punch(){
-
-    if(punching) return;
-
-    punching = true;
-
-    player.style.transform = "scale(1.25)";
-
-    setTimeout(()=>{
-        player.style.transform = "scale(1)";
-        punching = false;
-    },100);
-
-    enemies.forEach((enemy,index)=>{
-
-        const dx = Math.abs(enemy.x-playerX);
-
-        if(dx < 150){
-
-            combo++;
-
-            score += 100 * combo;
-
-            enemy.classList.add("hit");
-
-            setTimeout(()=>{
-                enemy.remove();
-            },80);
-
-            enemies.splice(index,1);
-
-            updateUI();
-        }
-    });
-}
-
-function updateEnemies(){
-
-    enemies.forEach((enemy,index)=>{
-
-        enemy.x -= enemy.speed;
-
-        enemy.style.left = enemy.x+"px";
-
-        if(enemy.x < -100){
-
-            enemy.remove();
-            enemies.splice(index,1);
-
-            combo = 0;
-        }
-    });
-}
-
-function updateItems(){
-
-    items.forEach((item,index)=>{
-
-        item.x -= item.speed;
-
-        item.style.left = item.x+"px";
-
-        const dx = Math.abs(item.x-playerX);
-        const dy = Math.abs(item.y-(window.innerHeight-140));
-
-        if(dx < 80 && dy < 100){
-
-            if(item.good){
-                score += 500;
-            }else{
-                score -= 300;
-            }
-
-            updateUI();
-
-            item.remove();
-            items.splice(index,1);
-        }
-
-        if(item.x < -100){
-            item.remove();
-            items.splice(index,1);
-        }
-    });
-}
-
-function updateUI(){
-
-    document.getElementById("score").innerText =
-      "Score: " + score;
-
-    const comboEl =
-      document.getElementById("combo");
-
-    if(combo > 1){
-        comboEl.innerHTML =
-          "<span class='combo'>" +
-          combo + " COMBO!</span>";
-    }else{
-        comboEl.innerHTML = "";
-    }
-}
-
-function gameLoop(){
-
-    updatePlayer();
-    updateEnemies();
-    updateItems();
-
-    requestAnimationFrame(gameLoop);
-}
-
-setInterval(()=>{
-    spawnEnemy();
-},1200);
-
-setInterval(()=>{
-
-    const good = Math.random() > 0.4;
-
-    spawnItem(good);
-
-},3000);
-
-gameLoop();
-
-</script>
 </body>
 </html>
