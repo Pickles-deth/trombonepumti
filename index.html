@@ -276,7 +276,18 @@ body{
         padding-bottom:40px;
     }
 }
+@keyframes rotateDevice {
+        0% { transform: rotate(0deg); }
+        50% { transform: rotate(-90deg); }
+        100% { transform: rotate(0deg); }
+    }
 
+    .rotate-icon {
+        display: inline-block;
+        font-size: 30px;
+        animation: rotateDevice 2s infinite;
+        margin-bottom: 10px;
+    }
 </style>
 </head>
 
@@ -376,7 +387,9 @@ body{
         <h1 id="messageText">
             PLAYER 1 START
         </h1>
-
+   <p style="color: #ccc; font-size: 18px; margin-top: -10px; margin-bottom: 20px;">
+        ※スマホを横にすると遊びやすいよ！
+    </p>
         <button id="nextButton">
             START
         </button>
